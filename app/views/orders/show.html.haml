@@ -1,0 +1,142 @@
+%div{ class: "container mx-auto px-4 py-6 max-w-4xl print:p-0 print:m-0" }  
+  %div{ class: "bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl shadow-sm print:shadow-none print:border-none print:bg-transparent p-8" }
+    
+    / --- COMPANY HEADER ---
+    .flex.justify-between.items-start.mb-8.pb-6.border-b.border-gray-200.dark:border-gray-700
+      %div
+        %h2.text-xl.font-black.text-gray-900.dark:text-white
+          Product Info Pvt Ltd
+        %p.text-sm.text-gray-500.mt-1
+          Kolkata, India
+        %p.text-sm.text-gray-500
+          GSTIN: 22ABCDE1234F1Z5
+        %p.text-sm.text-gray-500
+          support@prodinfo.com
+
+      %div.text-right
+        %p.text-xs.font-bold.text-gray-400.uppercase.tracking-widest
+          Invoice
+        %p.text-2xl.font-black.text-gray-900.dark:text-white
+          = invoice_number(@order)
+
+    / --- ORDER HEADER ---
+    .flex.justify-between.items-start.mb-8
+      %div
+        %p.text-sm.font-medium.text-gray-900.dark:text-white
+          Date: #{@order.created_at.strftime("%B %d, %Y")}
+        %p.text-xs.text-gray-500
+          Time: #{@order.created_at.in_time_zone("Asia/Kolkata").strftime("%I:%M %p")}
+
+      - status_class = @order.status == "Completed" ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300" : "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300"
+      %span{ class: "text-xs font-bold uppercase tracking-wider px-3 py-1.5 rounded-full #{status_class}" }
+        = @order.status
+
+    / --- CUSTOMER ---
+    .mb-8.p-5.bg-gray-50.rounded-xl.dark:bg-gray-900.print:bg-transparent.print:p-0
+      %p.text-xs.font-bold.text-gray-400.uppercase.tracking-widest.mb-1
+        Billed To
+      %p.text-lg.font-bold.text-gray-900.dark:text-white
+        = @order.customer.name
+      %p.text-sm.text-gray-600.dark:text-gray-400
+        = @order.customer.email
+
+    / --- ITEMS TABLE (WITH TFOOT) ---
+    %table.w-full.text-sm.mb-2
+      %thead.border-b.border-gray-200.dark:border-gray-700
+        %tr.text-left.text-gray-500.dark:text-gray-400.uppercase.text-xs.tracking-wider
+          %th.pb-3.font-bold Product
+          %th.pb-3.font-bold.text-center Qty
+          %th.pb-3.font-bold.text-right Price
+          %th.pb-3.font-bold.text-right Total
+
+      %tbody
+        - @order.order_items.each do |item|
+          %tr.border-b.border-gray-100.dark:border-gray-700.print:border-gray-200
+            %td.py-4
+              %p.font-bold.text-gray-900.dark:text-white
+                = item.product.name
+              %p.text-xs.text-gray-500
+                SKU: #{item.product.sku}
+
+            %td.text-center.font-medium.text-gray-700.dark:text-gray-300
+              = item.quantity
+
+            %td.text-right.text-gray-600.dark:text-gray-400
+              = number_to_currency(item.price_at_purchase, unit: "₹")
+
+            %td.text-right.font-black.text-gray-900.dark:text-white
+              = number_to_currency(item.total_price, unit: "₹")
+
+          / --- INTERNAL DATA (NOT PRINTED) ---
+          - if item.order_item_allocations.any?
+            %tr.print:hidden
+              %td{ colspan: 4 }
+                .mt-2.mb-6.p-4.bg-indigo-50.rounded-xl.border.border-indigo-100.dark:bg-gray-900.dark:border-gray-700
+                  %p.text-xs.font-bold.text-indigo-600.dark:text-indigo-400.uppercase.tracking-widest.mb-2 Fulfillment Ledger
+                  
+                  %table.w-full.text-xs
+                    %thead
+                      %tr.text-gray-500.dark:text-gray-400.border-b.border-indigo-200.dark:border-gray-700
+                        %th.pb-1.text-left Vendor
+                        %th.pb-1.text-center Qty
+                        %th.pb-1.text-right Cost/ea
+                        %th.pb-1.text-right Total
+
+                    %tbody
+                      - total_cost = 0
+                      - item.order_item_allocations.each do |alloc|
+                        - cost = alloc.quantity * (alloc.cost_price || 0)
+                        - total_cost += cost
+                        %tr.border-b.border-indigo-500.last:border-0.dark:border-gray-800
+                          %td.py-1.font-medium.text-gray-800.dark:text-gray-300= alloc.stock.vendor&.name || "Unknown"
+                          %td.py-1.text-center.text-gray-600.dark:text-gray-400= alloc.quantity
+                          %td.py-1.text-right.text-gray-600.dark:text-gray-400= number_to_currency(alloc.cost_price || 0, unit: "₹")
+                          %td.py-1.text-right.font-medium.text-gray-800.dark:text-gray-300= number_to_currency(cost, unit: "₹")
+
+                  - revenue = item.quantity * item.price_at_purchase
+                  - profit = revenue - total_cost
+                  - margin = revenue > 0 ? (profit / revenue) * 100 : 0
+
+                  .mt-3.pt-2.border-t.border-indigo-200.dark:border-gray-700.text-xs.flex.justify-between
+                    %span.text-gray-500.font-medium
+                      Batch Cost: #{number_to_currency(total_cost, unit: "₹")}
+                    %span.font-bold{ class: profit >= 0 ? "text-green-600 dark:text-green-400" : "text-red-600 dark:text-red-400" }
+                      Profit: #{number_to_currency(profit, unit: "₹")} (#{number_with_precision(margin, precision: 1)}%)
+
+      / --- TOTAL BUILT INTO TABLE TO FIX BORDERS ---
+      %tfoot
+        %tr
+          %td{ colspan: 3, class: "text-right font-bold text-gray-500 uppercase tracking-widest pt-6" } Total Amount
+          %td.text-right.font-black.text-xl.text-blue-600.dark:text-blue-400.pt-6
+            = number_to_currency(@order.total_amount, unit: "₹")
+
+    / --- ACTIONS ---
+    .flex.justify-end.space-x-4.mt-10.print:hidden
+      = link_to "Back to Orders", orders_path, class: "text-gray-600 bg-white border border-gray-200 hover:bg-gray-50 hover:text-gray-900 focus:ring-4 focus:ring-gray-100 font-bold rounded-xl text-sm px-6 py-3 transition-colors dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-700"
+      
+      %button{ onclick: "window.print()", class: "text-white bg-gray-900 hover:bg-black focus:ring-4 focus:outline-none focus:ring-gray-300 font-bold rounded-xl text-sm px-6 py-3 shadow-md hover:shadow-lg transition-all transform hover:-translate-y-0.5 dark:bg-gray-700 dark:hover:bg-gray-600" }
+        Print Invoice
+
+:css
+  @media print {
+    @page { size: portrait; margin: 1.5cm; }
+
+    body {
+      background: white !important;
+      color: black !important;
+    }
+
+    .dark\:bg-gray-800,
+    .dark\:bg-gray-700,
+    .dark\:bg-gray-900 {
+      background: transparent !important;
+    }
+
+    .dark\:text-white {
+      color: black !important;
+    }
+
+    .shadow, .shadow-sm, .shadow-lg {
+      box-shadow: none !important;
+    }
+  }

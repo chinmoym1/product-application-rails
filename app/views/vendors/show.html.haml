@@ -1,0 +1,19 @@
+.container.mx-auto.px-4.py-8.flex.justify-center
+  .w-full.max-w-md.bg-white.border.border-gray-200.rounded-lg.shadow.dark:bg-gray-800.dark:border-gray-700
+    .flex.flex-col.items-center.pb-10.pt-8
+      .w-24.h-24.mb-3.rounded-full.shadow-lg.bg-gray-100.flex.items-center.justify-center.text-3xl.font-bold.text-gray-600
+        = @vendor.name.first
+      %h5.mb-1.text-xl.font-medium.text-gray-900.dark:text-white= @vendor.name
+      %span.text-sm.text-gray-500.dark:text-gray-400 Vendor ID: #{"%04d" % @vendor.id}
+      
+      .w-full.px-6.mt-6.space-y-4
+        .flex.justify-between.border-b.pb-2
+          %span.font-semibold.text-gray-900.dark:text-white Email:
+          %span.text-gray-500= @vendor.email
+        .flex.justify-between.border-b.pb-2
+          %span.font-semibold.text-gray-900.dark:text-white Phone:
+          %span.text-gray-500= @vendor.phone
+
+      .flex.mt-6.space-x-3.md:mt-6
+        = link_to 'Edit', edit_vendor_path(@vendor), class: "inline-flex items-center px-4 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+        = link_to 'Back to Vendors', vendors_path, class: "inline-flex items-center px-4 py-2 text-sm font-medium text-center text-gray-900 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-700 dark:focus:ring-gray-700"

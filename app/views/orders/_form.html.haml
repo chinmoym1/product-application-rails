@@ -1,0 +1,85 @@
+= form_with(model: order, class: "space-y-8") do |f|
+  / Lock the items if the order is Completed, Returned, or Cancelled
+  - is_locked = order.persisted? && ["Completed", "Returned", "Cancelled"].include?(order.status)
+
+  - if order.errors.any?
+    .p-4.mb-4.text-sm.text-red-800.rounded-lg.bg-red-50.dark:bg-gray-800.dark:text-red-400
+      %span.font-medium Please fix the following errors:
+      %ul.list-disc.pl-5.mt-2
+        - order.errors.full_messages.each do |message|
+          %li= message
+
+  .bg-white.p-6.rounded-lg.shadow-md.border.border-gray-200.dark:bg-gray-800.dark:border-gray-700
+    %h2.text-xl.font-bold.text-gray-900.dark:text-white.mb-4 Order Details
+    
+    .grid.grid-cols-1.md:grid-cols-2.gap-6
+      %div
+        = f.label :customer_email, "Customer Email Address", class: "block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+        
+        - if is_locked
+          = f.hidden_field :customer_id
+          = email_field_tag nil, order.customer.email, disabled: true, class: "bg-gray-200 cursor-not-allowed border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-400"
+        
+        - else
+          / THE HYBRID INPUT: Acts as both a text field AND a dropdown search
+          = f.email_field :customer_email, list: "customer-emails", placeholder: "Select or type new email...", value: order.customer&.email, autocomplete: "off", class: "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white", required: true
+          
+          / THE DROPDOWN DATA: The browser automatically connects this to the input above
+          %datalist#customer-emails
+            - @customers.each do |customer|
+              / It displays the Name in the dropdown, but submits the Email!
+              %option{ value: customer.email }= customer.name
+      %div
+        = f.label :status, class: "block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+        
+        - if order.persisted? && ["Returned", "Cancelled"].include?(order.status)
+          = f.hidden_field :status
+          = text_field_tag nil, order.status, disabled: true, class: "bg-gray-200 cursor-not-allowed border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-400"
+        - else
+          - options = (order.persisted? && order.status == 'Completed') ? ["Completed", "Returned", "Cancelled"] : ["Pending", "Processing", "Completed", "Cancelled"]
+          = f.select :status, options, {}, class: "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+
+  .bg-white.p-6.rounded-lg.shadow-md.border.border-gray-200.dark:bg-gray-800.dark:border-gray-700
+    %h2.text-xl.font-bold.text-gray-900.dark:text-white.mb-4 Order Items
+
+    - if is_locked
+      .p-4.mb-6.text-sm.text-blue-800.rounded-lg.bg-blue-50.dark:bg-gray-700.dark:text-blue-400
+        %span.font-medium Locked Record:
+        This order has been finalized. Products and quantities cannot be changed.
+        - if order.status == "Completed"
+          To restock these items, change the status to 'Returned' or 'Cancelled'.
+
+      .relative.overflow-x-auto.border.border-gray-200.rounded-lg.dark:border-gray-700
+        %table.w-full.text-sm.text-left.text-gray-500.dark:text-gray-400
+          %thead.text-xs.text-gray-700.uppercase.bg-gray-100.dark:bg-gray-700.dark:text-gray-400
+            %tr
+              %th.px-4.py-3 Product
+              %th.px-4.py-3 Quantity
+              %th.px-4.py-3 Unit Price
+          %tbody
+            - order.order_items.each do |item|
+              %tr.bg-white.border-b.dark:bg-gray-800.dark:border-gray-700
+                %td.px-4.py-3.font-medium.text-gray-900.dark:text-white= item.product.name
+                %td.px-4.py-3= item.quantity
+                %td.px-4.py-3= number_to_currency(item.price_at_purchase, unit: "₹")
+
+    - else
+      %div{ data: { controller: "nested-form" } }
+        %template{ data: { nested_form_target: "template" } }
+          = f.fields_for :order_items, OrderItem.new, child_index: 'NEW_RECORD' do |item_fields|
+            = render 'order_item_fields', f: item_fields
+
+        = f.fields_for :order_items do |item_fields|
+          = render 'order_item_fields', f: item_fields
+
+        %div{ data: { nested_form_target: "target" } }
+
+        %button{ type: "button", data: { action: "click->nested-form#add" }, class: "mt-2 text-white bg-green-600 hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800" }
+          + Add Product
+
+  .flex.justify-end.space-x-3.mt-6
+    - if is_locked && ["Returned", "Cancelled"].include?(order.status)
+      = link_to 'Back to Orders', orders_path, class: "text-white bg-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-800"
+    - else
+      = link_to 'Cancel', orders_path, class: "text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-700"
+      = f.submit "Save Order", class: "text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"

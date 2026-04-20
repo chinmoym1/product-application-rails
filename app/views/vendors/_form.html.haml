@@ -1,0 +1,23 @@
+= form_with(model: vendor, class: "space-y-6 bg-white p-8 rounded-lg shadow-md border border-gray-200 dark:bg-gray-800 dark:border-gray-700") do |f|
+  - if vendor.errors.any?
+    .p-4.mb-4.text-sm.text-red-800.rounded-lg.bg-red-50.dark:bg-gray-800.dark:text-red-400
+      %span.font-medium Please fix the following errors:
+      %ul.list-disc.pl-5.mt-2
+        - vendor.errors.full_messages.each do |message|
+          %li= message
+
+  .mb-6
+    = f.label :name, class: "block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+    = f.text_field :name, class: "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500", placeholder: "Vendor Company Name"
+
+  .mb-6
+    = f.label :email, class: "block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+    = f.email_field :email, class: "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500", placeholder: "contact@vendor.com"
+
+  .mb-6
+    = f.label :phone, "Mobile Number", class: "block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+    = f.telephone_field :phone, class: "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500", placeholder: "9876543210", pattern: "[0-9]{10}", maxlength: 10, title: "Please enter exactly 10 digits"
+
+  .flex.justify-end.space-x-3
+    = link_to 'Cancel', vendors_path, class: "text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
+    = f.submit class: "text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"

@@ -1,0 +1,37 @@
+.container.mx-auto.px-4.py-8
+  .flex.justify-between.items-center.mb-6
+    %h1.text-3xl.font-bold.text-gray-900.dark:text-white Inventory Dashboard
+
+  .relative.overflow-x-auto.shadow-md.sm:rounded-lg
+    %table.w-full.text-sm.text-left.text-gray-500.dark:text-gray-400
+      %thead.text-xs.text-gray-700.uppercase.bg-gray-50.dark:bg-gray-700.dark:text-gray-400
+        %tr
+          %th.px-6.py-3{scope: "col"} Product
+          %th.px-6.py-3{scope: "col"} SKU
+          %th.px-6.py-3{scope: "col"} Location
+          %th.px-6.py-3{scope: "col"} Vendors  
+          %th.px-6.py-3{scope: "col"} Cost Price       
+          %th.px-6.py-3{scope: "col"} Quantity
+          %th.px-6.py-3{scope: "col"} Actions
+      %tbody
+        - @stocks.each do |stock|
+          %tr.bg-white.border-b.dark:bg-gray-800.dark:border-gray-700.hover:bg-gray-50.dark:hover:bg-gray-600
+            %th.px-6.py-4.font-medium.text-gray-900.whitespace-nowrap.dark:text-white{scope: "row"}= stock.product.name
+            %td.px-6.py-4= stock.product.sku
+            %td.px-6.py-4= stock.location.presence || "Not Assigned"
+            %td.px-6.py-4
+              - if stock.vendor
+                %span.font-medium.text-blue-600.dark:text-blue-400= stock.vendor.name
+              - else
+                %span.text-gray-400.italic Unknown
+            %td.px-6.py-4.font-medium.text-gray-900.dark:text-white
+              = number_to_currency(stock.cost_price || 0, unit: "₹")
+            %td.px-6.py-4
+              - if stock.quantity == 0
+                %span.bg-red-100.text-red-800.text-xs.font-medium.mr-2.px-2.5.py-0.5.rounded.dark:bg-red-900.dark:text-red-300
+                  Out of Stock
+              - else
+                %span.bg-green-100.text-green-800.text-xs.font-medium.mr-2.px-2.5.py-0.5.rounded.dark:bg-green-900.dark:text-green-300
+                  #{stock.quantity} in stock
+            %td.px-6.py-4.flex.space-x-3
+              = link_to 'Update Stock', edit_stock_path(stock), class: "font-medium text-blue-600 dark:text-blue-500 hover:underline"

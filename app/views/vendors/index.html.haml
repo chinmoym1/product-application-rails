@@ -1,0 +1,23 @@
+.container.mx-auto.px-4.py-8
+  .flex.justify-between.items-center.mb-6
+    %h1.text-3xl.font-bold.text-gray-900.dark:text-white Vendors
+    = link_to 'New Vendor', new_vendor_path, class: "text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+
+  .relative.overflow-x-auto.shadow-md.sm:rounded-lg
+    %table.w-full.text-sm.text-left.text-gray-500.dark:text-gray-400
+      %thead.text-xs.text-gray-700.uppercase.bg-gray-50.dark:bg-gray-700.dark:text-gray-400
+        %tr
+          %th.px-6.py-3{scope: "col"} Name
+          %th.px-6.py-3{scope: "col"} Email
+          %th.px-6.py-3{scope: "col"} Phone
+          %th.px-6.py-3{scope: "col"} Actions
+      %tbody
+        - @vendors.each do |vendor|
+          %tr.bg-white.border-b.dark:bg-gray-800.dark:border-gray-700.hover:bg-gray-50.dark:hover:bg-gray-600
+            %th.px-6.py-4.font-medium.text-gray-900.whitespace-nowrap.dark:text-white{scope: "row"}= vendor.name
+            %td.px-6.py-4= vendor.email
+            %td.px-6.py-4= vendor.phone
+            %td.px-6.py-4.flex.space-x-3
+              = link_to 'View', vendor_path(vendor), class: "font-medium text-blue-600 dark:text-blue-500 hover:underline"
+              = link_to 'Edit', edit_vendor_path(vendor), class: "font-medium text-yellow-600 dark:text-yellow-500 hover:underline"
+              = button_to 'Delete', vendor_path(vendor), method: :delete, data: { turbo_confirm: 'Are you sure?' }, class: "font-medium text-red-600 dark:text-red-500 hover:underline bg-transparent border-0 p-0 cursor-pointer"

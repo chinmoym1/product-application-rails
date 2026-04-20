@@ -1,0 +1,28 @@
+= form_with(model: product, class: "space-y-6 bg-white p-8 rounded-lg shadow-md border border-gray-200 dark:bg-gray-800 dark:border-gray-700") do |f|
+  - if product.errors.any?
+    .p-4.mb-4.text-sm.text-red-800.rounded-lg.bg-red-50.dark:bg-gray-800.dark:text-red-400
+      %span.font-medium Please fix the following errors:
+      %ul.list-disc.pl-5.mt-2
+        - product.errors.full_messages.each do |message|
+          %li= message
+
+  .grid.grid-cols-1.md:grid-cols-2.gap-6
+    .col-span-2.md:col-span-1
+      = f.label :name, class: "block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+      = f.text_field :name, placeholder: "e.g. Premium Cotton Hoodie", class: "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+
+    .col-span-2.md:col-span-1
+      = f.label :sku, "SKU (Stock Keeping Unit)", class: "block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+      = f.text_field :sku, placeholder: "HOD-101-BLK", class: "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+
+    .col-span-2.md:col-span-1
+      = f.label :price, "Retail Price", class: "block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+      = f.number_field :price, step: 0.01, placeholder: "₹ 0.00", class: "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+
+    .col-span-2
+      = f.label :description, class: "block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+      = f.text_area :description, rows: 4, placeholder: "Describe the product materials, dimensions, or special features...", class: "block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+
+  .flex.justify-end.space-x-3.mt-6
+    = link_to 'Cancel', products_path, class: "text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700"
+    = f.submit product.new_record? ? "Create Product" : "Update Product", class: "text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700"

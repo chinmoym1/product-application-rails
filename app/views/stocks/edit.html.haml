@@ -1,0 +1,35 @@
+.container.mx-auto.px-4.py-8.max-w-2xl
+  / --- HEADER (MOVED OUTSIDE THE FORM CARD) ---
+  .mb-8
+    %h1.text-3xl.font-extrabold.text-gray-900.dark:text-white Edit Stock Batch
+    .flex.items-center.mt-3.space-x-3
+      %span.text-sm.font-medium.text-gray-500.dark:text-gray-400 Updating inventory for:
+      
+      / HIGHLIGHTED PRODUCT NAME & SKU
+      %span.text-lg.font-black.text-blue-600.dark:text-blue-400= @stock.product.name
+      %span.bg-indigo-100.text-indigo-800.text-xs.font-bold.px-2.py-1.rounded.dark:bg-indigo-900.dark:text-indigo-300
+        SKU: #{@stock.product.sku}
+
+  / --- THE FORM CARD ---
+  .bg-white.rounded-2xl.shadow-sm.border.border-gray-200.p-8.dark:bg-gray-800.dark:border-gray-700
+    = form_with(model: @stock, local: true, class: "space-y-6") do |f|
+      %div
+        = f.label :vendor_id, "Purchased From (Vendor)", class: "block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+        = f.collection_select :vendor_id, current_user.vendors, :id, :name, { prompt: "Select the supplier..." }, class: "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white", required: true
+      
+      .grid.grid-cols-1.md:grid-cols-2.gap-6
+        %div
+          = f.label :quantity, "Quantity in Batch", class: "block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+          = f.number_field :quantity, class: "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white", required: true
+        
+        %div
+          = f.label :cost_price, "Cost Price (Per Unit)", class: "block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+          = f.number_field :cost_price, step: 0.01, placeholder: "₹0.00", class: "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+      
+      %div
+        = f.label :location, "Warehouse Location", class: "block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+        = f.text_field :location, placeholder: "e.g. Shelf A2", class: "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+
+      .flex.justify-end.space-x-3.pt-6.border-t.border-gray-100.dark:border-gray-700
+        = link_to "Cancel", product_path(@stock.product), class: "px-5 py-2.5 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:ring-4 focus:ring-gray-200 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700"
+        = f.submit "Update Batch", class: "text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700"

@@ -1,0 +1,25 @@
+= form_with(model: stock, class: "space-y-6 bg-white p-8 rounded-lg shadow-md border border-gray-200 dark:bg-gray-800 dark:border-gray-700") do |f|
+  - if stock.errors.any?
+    .p-4.mb-4.text-sm.text-red-800.rounded-lg.bg-red-50.dark:bg-gray-800.dark:text-red-400
+      %span.font-medium Please fix the following errors:
+      %ul.list-disc.pl-5.mt-2
+        - stock.errors.full_messages.each do |message|
+          %li= message
+
+  .mb-6
+    = label_tag :product_name, "Product", class: "block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+    = text_field_tag :product_name, stock.product.name, disabled: true, class: "bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 cursor-not-allowed dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-400"
+    %p.mt-2.text-sm.text-gray-500.dark:text-gray-400 SKU: #{stock.product.sku}
+
+  .grid.grid-cols-1.md:grid-cols-2.gap-6
+    .col-span-2.md:col-span-1
+      = f.label :quantity, "Stock Quantity", class: "block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+      = f.number_field :quantity, min: 0, class: "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+
+    .col-span-2.md:col-span-1
+      = f.label :location, "Warehouse Location", class: "block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+      = f.text_field :location, class: "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white", placeholder: "e.g., Aisle 4, Bin B"
+
+  .flex.justify-end.space-x-3.mt-6
+    = link_to 'Cancel', stocks_path, class: "text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-700"
+    = f.submit "Update Inventory", class: "text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
