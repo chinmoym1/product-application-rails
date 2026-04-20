@@ -6,9 +6,6 @@ class Product < ApplicationRecord
 
   # accepts_nested_attributes_for :product_vendors, allow_destroy: true, reject_if: :all_blank
 
-  has_one :stock, dependent: :destroy
-  # accepts_nested_attributes_for :stock
-
   has_many :order_items, dependent: :restrict_with_error
   has_many :orders, through: :order_items
 
