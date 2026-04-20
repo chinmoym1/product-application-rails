@@ -9,6 +9,7 @@ class Order < ApplicationRecord
   validate :check_inventory_levels
   validate :order_is_locked_after_completion, on: :update
   validate :must_have_at_least_one_item
+  validate :must_not_have_duplicate_products
 
   before_save :calculate_inventory_adjustments
   after_save :execute_inventory_adjustments
@@ -55,8 +56,22 @@ class Order < ApplicationRecord
   end
 
   def must_have_at_least_one_item
-    if order_items.reject(&:marked_for_destruction?).empty?
-      errors.add(:base, "An order must contain at least one product.")
+    active_items = order_items.reject(&:marked_for_destruction?)
+    
+    if active_items.empty?
+      errors.add(:base, "Order must have at least one product.")
+    end
+  end
+
+  def must_not_have_duplicate_products
+    active_items = order_items.reject(&:marked_for_destruction?)
+    
+    duplicated_groups = active_items.group_by(&:product_id).select { |product_id, items| items.size > 1 && product_id.present? }
+    
+    duplicated_groups.values.each do |items|
+      product_name = items.first.product&.name || "A selected product"
+      
+      errors.add(:base, "Duplicate found: '#{product_name}'. Please remove the extra row and adjust the quantity instead.")
     end
   end
 

@@ -1,4 +1,4 @@
-.nested-fields.flex.flex-col.md:flex-row.gap-4.items-end.mb-4.p-4.border.border-gray-200.rounded-lg.bg-gray-50.dark:bg-gray-900.dark:border-gray-700{ data: { new_record: f.object.new_record?.to_s, controller: "product-pricing" } }
+.nested-fields.flex.flex-col.md:flex-row.gap-4.items-end.mb-4.p-4.border.border-gray-200.rounded-lg.bg-gray-50.dark:bg-gray-900.dark:border-gray-700{ class: ("hidden" if f.object.marked_for_destruction?), data: { new_record: f.object.new_record?.to_s, controller: "product-pricing" } }
   
   = f.hidden_field :_destroy
 

@@ -112,9 +112,9 @@
 
     / --- ACTIONS ---
     .flex.justify-end.space-x-4.mt-10.print:hidden
-      = link_to "Back to Orders", orders_path, class: "text-gray-600 bg-white border border-gray-200 hover:bg-gray-50 hover:text-gray-900 focus:ring-4 focus:ring-gray-100 font-bold rounded-xl text-sm px-6 py-3 transition-colors dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-700"
+      = link_to "Back to Orders", orders_path, class: "text-gray-600 bg-white border border-gray-200 hover:bg-gray-50 focus:ring-1 focus:ring-gray-100 font-bold rounded-xl text-sm px-6 py-3 transition-colors dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-700"
       
-      %button{ onclick: "window.print()", class: "text-white bg-gray-900 hover:bg-black focus:ring-4 focus:outline-none focus:ring-gray-300 font-bold rounded-xl text-sm px-6 py-3 shadow-md hover:shadow-lg transition-all transform hover:-translate-y-0.5 dark:bg-gray-700 dark:hover:bg-gray-600" }
+      %button{ onclick: "window.print()", class: "text-white bg-gray-900 hover:bg-black focus:ring-1 focus:outline-none focus:ring-gray-300 font-bold rounded-xl text-sm px-6 py-3 shadow-md hover:shadow-lg transition-all transform hover:-translate-y-0.5 dark:bg-gray-700 dark:hover:bg-gray-600" }
         Print Invoice
 
 :css
