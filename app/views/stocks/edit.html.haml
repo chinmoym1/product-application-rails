@@ -30,6 +30,12 @@
         = f.label :location, "Warehouse Location", class: "block mb-2 text-sm font-medium text-gray-900 dark:text-white"
         = f.text_field :location, placeholder: "e.g. Shelf A2", class: "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
 
-      .flex.justify-end.space-x-3.pt-6.border-t.border-gray-100.dark:border-gray-700
-        = link_to "Cancel", product_path(@stock.product), class: "px-5 py-2.5 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:ring-4 focus:ring-gray-200 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700"
-        = f.submit "Update Batch", class: "text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700"
+      .flex.justify-end.space-x-4.mt-8.pt-6.border-t.border-gray-100.dark:border-gray-700
+    
+        / THE SMART CANCEL BUTTON
+        - fallback_path = @stock.product ? product_path(@stock.product) : stocks_path
+        - cancel_path = session[:stock_return_to] || fallback_path
+        
+        = link_to 'Cancel', cancel_path, class: "text-gray-600 bg-white border border-gray-200 hover:bg-gray-50 hover:focus:ring-1 focus:ring-gray-100 font-bold rounded-xl text-sm px-6 py-3 transition-colors dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-700"
+        
+        = f.submit @stock.new_record? ? "Add Stock" : "Update Stock", class: "text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 focus:ring-4 focus:outline-none focus:ring-indigo-300 font-bold rounded-xl text-sm px-6 py-3 shadow-md hover:shadow-lg transition-all transform hover:-translate-y-0.5 dark:focus:ring-indigo-800 cursor-pointer"

@@ -10,9 +10,12 @@ class StocksController < ApplicationController
   end
 
   def edit
+    session[:stock_return_to] = request.referer
   end
 
   def new
+    session[:stock_return_to] = request.referer
+
     @product = current_user.products.find(params[:product_id])
     @stock = @product.stocks.build
   end
@@ -25,7 +28,8 @@ class StocksController < ApplicationController
     @stock.user_id = current_user.id if @stock.respond_to?(:user_id=)
 
     if @stock.save
-      redirect_to @product, notice: "Shipment received successfully!"
+      return_path = session.delete(:stock_return_to) || @stock.product
+      redirect_to return_path, notice: "Stock was successfully added."
     else
       render :new, status: :unprocessable_entity
     end
@@ -33,7 +37,8 @@ class StocksController < ApplicationController
 
   def update
     if @stock.update(stock_params)
-      redirect_to product_path(@stock.product), notice: "Stock batch was successfully updated."   
+      return_path = session.delete(:stock_return_to) || @stock.product
+      redirect_to return_path, notice: "Stock was successfully updated."
     else
       render :edit, status: :unprocessable_entity
     end
