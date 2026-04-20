@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2026_04_19_204447) do
+ActiveRecord::Schema[7.1].define(version: 2026_04_20_064940) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -54,16 +54,6 @@ ActiveRecord::Schema[7.1].define(version: 2026_04_19_204447) do
     t.bigint "user_id"
     t.index ["customer_id"], name: "index_orders_on_customer_id"
     t.index ["user_id"], name: "index_orders_on_user_id"
-  end
-
-  create_table "product_vendors", force: :cascade do |t|
-    t.bigint "product_id", null: false
-    t.bigint "vendor_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.decimal "cost_price"
-    t.index ["product_id"], name: "index_product_vendors_on_product_id"
-    t.index ["vendor_id"], name: "index_product_vendors_on_vendor_id"
   end
 
   create_table "products", force: :cascade do |t|
@@ -118,8 +108,6 @@ ActiveRecord::Schema[7.1].define(version: 2026_04_19_204447) do
   add_foreign_key "order_items", "products"
   add_foreign_key "orders", "customers"
   add_foreign_key "orders", "users"
-  add_foreign_key "product_vendors", "products"
-  add_foreign_key "product_vendors", "vendors"
   add_foreign_key "products", "users"
   add_foreign_key "stocks", "products"
   add_foreign_key "stocks", "vendors"

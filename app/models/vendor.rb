@@ -1,8 +1,8 @@
 class Vendor < ApplicationRecord
   belongs_to :user
 
-  has_many :product_vendors, dependent: :restrict_with_error
-  has_many :products, through: :product_vendors
+  # has_many :product_vendors, dependent: :restrict_with_error
+  # has_many :products, through: :product_vendors
 
   validates :name, presence: true
   validates :email, uniqueness: { scope: :user_id }, allow_blank: true 

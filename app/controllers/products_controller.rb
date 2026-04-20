@@ -3,7 +3,7 @@ class ProductsController < ApplicationController
   before_action :set_vendors, only: %i[ new edit create update ]
 
   def index
-    @products = current_user.products.includes(:vendors) 
+    @products = current_user.products.includes(:stocks) 
   end
 
   def show

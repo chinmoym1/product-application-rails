@@ -1,8 +1,8 @@
 class Product < ApplicationRecord
   belongs_to :user
   # A product can be supplied by multiple different vendors
-  has_many :product_vendors, dependent: :destroy
-  has_many :vendors, through: :product_vendors
+  # has_many :product_vendors, dependent: :destroy
+  # has_many :vendors, through: :product_vendors
 
   # accepts_nested_attributes_for :product_vendors, allow_destroy: true, reject_if: :all_blank
 

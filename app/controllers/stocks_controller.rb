@@ -3,7 +3,7 @@ class StocksController < ApplicationController
   before_action :set_stock, only: %i[ show edit update ]
 
   def index
-    @stocks = current_user.stocks.includes(product: :vendors).order(updated_at: :desc)
+    @stocks = current_user.stocks.includes(:product, :vendor).order(updated_at: :desc)
   end
 
   def show
