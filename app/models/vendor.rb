@@ -3,6 +3,8 @@ class Vendor < ApplicationRecord
 
   has_many :stocks, dependent: :restrict_with_error
 
+  has_many :products, -> { distinct }, through: :stocks
+
   # has_many :product_vendors, dependent: :restrict_with_error
   # has_many :products, through: :product_vendors
 

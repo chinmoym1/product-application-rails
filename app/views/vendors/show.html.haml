@@ -1,19 +1,63 @@
-.container.mx-auto.px-4.py-8.flex.justify-center
-  .w-full.max-w-md.bg-white.border.border-gray-200.rounded-lg.shadow.dark:bg-gray-800.dark:border-gray-700
-    .flex.flex-col.items-center.pb-10.pt-8
-      .w-24.h-24.mb-3.rounded-full.shadow-lg.bg-gray-100.flex.items-center.justify-center.text-3xl.font-bold.text-gray-600
-        = @vendor.name.first
-      %h5.mb-1.text-xl.font-medium.text-gray-900.dark:text-white= @vendor.name
-      %span.text-sm.text-gray-500.dark:text-gray-400 Vendor ID: #{"%04d" % @vendor.id}
-      
-      .w-full.px-6.mt-6.space-y-4
-        .flex.justify-between.border-b.pb-2
-          %span.font-semibold.text-gray-900.dark:text-white Email:
-          %span.text-gray-500= @vendor.email
-        .flex.justify-between.border-b.pb-2
-          %span.font-semibold.text-gray-900.dark:text-white Phone:
-          %span.text-gray-500= @vendor.phone
+.max-w-7xl.mx-auto.pb-8
+  
+  .grid.grid-cols-1.lg:grid-cols-4.gap-6
+    
+    / LEFT COLUMN Vendor Profile
+    .col-span-1
+      .bg-white.border.border-gray-200.rounded-2xl.shadow-sm.dark:bg-gray-800.dark:border-gray-700.overflow-hidden
+        .flex.flex-col.items-center.pb-8.pt-8
+          
+          / Avatar Circle
+          .w-24.h-24.mb-4.rounded-full.shadow-md.bg-indigo-50.flex.items-center.justify-center.text-3xl.font-bold.text-indigo-600.dark:bg-indigo-900.dark:text-indigo-400
+            = @vendor.name.first.upcase
+          
+          / Basic Info
+          %h5.mb-1.text-xl.font-bold.text-gray-900.dark:text-white.text-center.px-4= @vendor.name
+          %span.text-sm.font-medium.text-gray-500.dark:text-gray-400 Vendor ID: #{"%04d" % @vendor.id}
+          
+          / Contact Details
+          .w-full.px-6.mt-6.space-y-3
+            .flex.flex-col.border-b.border-gray-100.dark:border-gray-700.pb-3
+              %span.text-xs.font-bold.text-gray-400.uppercase.tracking-wider.mb-1 Email
+              %span.text-sm.font-medium.text-gray-900.dark:text-white.break-all= @vendor.email
+            
+            .flex.flex-col.border-b.border-gray-100.dark:border-gray-700.pb-3
+              %span.text-xs.font-bold.text-gray-400.uppercase.tracking-wider.mb-1 Phone
+              %span.text-sm.font-medium.text-gray-900.dark:text-white= @vendor.phone
 
-      .flex.mt-6.space-x-3.md:mt-6
-        = link_to 'Edit', edit_vendor_path(@vendor), class: "inline-flex items-center px-4 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-        = link_to 'Back to Vendors', vendors_path, class: "inline-flex items-center px-4 py-2 text-sm font-medium text-center text-gray-900 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-700 dark:focus:ring-gray-700"
+          .w-full.px-6.mt-8.flex.flex-col.space-y-3
+            = link_to 'Edit Vendor', edit_vendor_path(@vendor), class: "w-full inline-flex justify-center items-center px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 focus:ring-4 focus:outline-none focus:ring-indigo-300 dark:bg-indigo-500 dark:hover:bg-indigo-600 dark:focus:ring-indigo-800 transition-colors"
+            = link_to 'Back to Vendors', vendors_path, class: "w-full inline-flex justify-center items-center px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:ring-4 focus:outline-none focus:ring-gray-200 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-700 dark:focus:ring-gray-700 transition-colors"
+
+    / RIGHT COLUMN Associated Products Table
+    .col-span-1.lg:col-span-3
+      .bg-white.rounded-2xl.shadow-sm.border.border-gray-200.dark:bg-gray-800.dark:border-gray-700.h-full
+        .p-6.border-b.border-gray-200.dark:border-gray-700.flex.justify-between.items-center
+          %h2.text-lg.font-bold.text-gray-900.dark:text-white Products Supplied by #{@vendor.name}
+          
+          / showing total products
+          %span.bg-indigo-100.text-indigo-800.text-xs.font-medium.px-2.5.py-0.5.rounded-full.dark:bg-indigo-900.dark:text-indigo-300
+            = pluralize(@vendor.products.count, 'Product')
+
+        .p-0
+          - if @vendor.products.any?
+            .overflow-x-auto
+              %table.w-full.text-sm.text-left.text-gray-500.dark:text-gray-400
+                %thead.text-xs.text-gray-700.uppercase.bg-gray-50.dark:bg-gray-900.dark:text-gray-300
+                  %tr
+                    %th.px-6.py-4 Product Name
+                    %th.px-6.py-4 SKU
+                    %th.px-6.py-4 Retail Price
+                %tbody.divide-y.divide-gray-200.dark:divide-gray-700
+                  - @vendor.products.each do |product|
+                    %tr.bg-white.hover:bg-gray-50.dark:bg-gray-800.dark:hover:bg-gray-700.transition-colors
+                      %td.px-6.py-4.font-medium.text-gray-900.dark:text-white= product.name
+                      %td.px-6.py-4= product.sku
+                      %td.px-6.py-4.text-indigo-600.dark:text-indigo-400.font-medium= number_to_currency(product.price, unit: "₹")
+          - else
+            / Empty State
+            .text-center.py-16
+              %svg.mx-auto.h-12.w-12.text-gray-400.dark:text-gray-500{fill: "none", stroke: "currentColor", viewBox: "0 0 24 24", xmlns: "http://www.w3.org/2000/svg"}
+                %path{stroke_linecap: "round", stroke_linejoin: "round", stroke_width: "1.5", d: "M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"}
+              %h3.mt-4.text-sm.font-bold.text-gray-900.dark:text-white No products yet
+              %p.mt-1.text-sm.text-gray-500.dark:text-gray-400 This vendor has not supplied any stock to your warehouse.
