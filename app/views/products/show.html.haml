@@ -9,13 +9,13 @@
     
     .flex.items-center.space-x-3.mt-4.md:mt-0
       / BACK BUTTON
-      = link_to products_path, class: "inline-flex items-center px-4 py-2.5 text-sm font-medium text-gray-900 bg-gray-100 border border-gray-300 rounded-lg rounded-lg hover:bg-gray-200 focus:ring-4 focus:ring-gray-200 dark:bg-gray-700 dark:text-white dark:hover:bg-gray-600 transition-colors" do
+      = link_to products_path, class: "inline-flex items-center px-4 py-2.5 text-sm font-medium text-gray-900 bg-gray-100 border border-gray-300 rounded-lg rounded-lg hover:bg-gray-200 focus:ring-1 focus:ring-gray-200 dark:bg-gray-700 dark:text-white dark:hover:bg-gray-600 transition-colors" do
         %svg.w-4.h-4.mr-2{"fill" => "none", "stroke" => "currentColor", "viewBox" => "0 0 24 24"}
           %path{"stroke-linecap" => "round", "stroke-linejoin" => "round", "stroke-width" => "2", "d" => "M10 19l-7-7m0 0l7-7m-7 7h18"}
         Back
 
       / EDIT BUTTON
-      = link_to edit_product_path(@product), class: "inline-flex items-center px-4 py-2.5 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg shadow-sm hover:bg-gray-50 focus:ring-4 focus:ring-gray-200 dark:bg-gray-800 dark:text-gray-200 dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:text-white transition-colors" do
+      = link_to edit_product_path(@product), class: "inline-flex items-center px-4 py-2.5 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg shadow-sm hover:bg-gray-50 focus:ring-1 focus:ring-gray-200 dark:bg-gray-800 dark:text-gray-200 dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:text-white transition-colors" do
         %svg.w-4.h-4.mr-2{"fill" => "none", "stroke" => "currentColor", "viewBox" => "0 0 24 24"}
           %path{"stroke-linecap" => "round", "stroke-linejoin" => "round", "stroke-width" => "2", "d" => "M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"}
         Edit Product
@@ -79,7 +79,7 @@
                         %strong= number_to_currency(stock_batch.cost_price || 0, unit: "₹")
                       %div.text-gray-700.dark:text-gray-300
                         %span.text-gray-400 Loc:
-                        %strong #{stock_batch.location.presence || "Main"}
+                        %strong #{stock_batch.location.presence || "Main Warehouse"}
 
                   .mt-4.sm:mt-0.flex.items-center.space-x-4.w-full.sm:w-auto.justify-between
                     %div.text-right.sm:text-left

@@ -1,6 +1,8 @@
 class Vendor < ApplicationRecord
   belongs_to :user
 
+  has_many :stocks, dependent: :restrict_with_error
+
   # has_many :product_vendors, dependent: :restrict_with_error
   # has_many :products, through: :product_vendors
 
