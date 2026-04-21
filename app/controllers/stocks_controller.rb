@@ -1,6 +1,6 @@
 class StocksController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_stock, only: %i[ show edit update ]
+  before_action :set_stock, only: %i[ show edit update destroy ]
 
   def index
     @stocks = current_user.stocks.includes(:product, :vendor).order(updated_at: :desc)
@@ -41,6 +41,16 @@ class StocksController < ApplicationController
       redirect_to return_path, notice: "Stock was successfully updated."
     else
       render :edit, status: :unprocessable_entity
+    end
+  end
+
+  def destroy
+    if @stock.destroy
+      return_path = request.referer || stocks_path
+      redirect_to return_path, notice: "Stock record was successfully deleted."
+    else
+      return_path = request.referer || stocks_path
+      redirect_to return_path, alert: "Could not delete: #{@stock.errors.full_messages.to_sentence}"
     end
   end
 
