@@ -17,7 +17,7 @@
             %th.px-6.py-4.font-medium.text-gray-900.whitespace-nowrap.dark:text-white{scope: "row"}= vendor.name
             %td.px-6.py-4= vendor.email
             %td.px-6.py-4= vendor.phone
-            %td.px-6.py-4.flex.space-x-3
-              = link_to 'View', vendor_path(vendor), class: "font-medium text-blue-600 dark:text-blue-500 hover:underline"
-              = link_to 'Edit', edit_vendor_path(vendor), class: "font-medium text-yellow-600 dark:text-yellow-500 hover:underline"
-              = button_to 'Delete', vendor_path(vendor), method: :delete, data: { turbo_confirm: 'Are you sure?' }, class: "font-medium text-red-600 dark:text-red-500 hover:underline bg-transparent border-0 p-0 cursor-pointer"
+            %td.px-6.py-4.flex.space-x-4
+              = link_to icon(:eye), vendor_path(vendor), title: "View Details", class: "font-medium text-blue-600 dark:text-blue-500 hover:underline"
+              = link_to icon(:pencil), edit_vendor_path(vendor), title: "Edit Details", class: "font-medium text-yellow-600 dark:text-yellow-500 hover:underline"
+              = button_to icon(:trash), vendor_path(vendor), title: "Delete Record", method: :delete, data: { turbo_confirm: 'Are you sure?' }, class: "font-medium text-red-600 dark:text-red-500 hover:underline bg-transparent border-0 p-0 cursor-pointer"

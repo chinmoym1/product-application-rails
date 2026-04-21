@@ -18,6 +18,6 @@
             %td.px-6.py-4= customer.email
             %td.px-6.py-4= customer.created_at.strftime("%b %d, %Y")
             %td.px-6.py-4.flex.space-x-3
-              = link_to 'Profile', customer_path(customer), class: "font-medium text-blue-600 dark:text-blue-500 hover:underline"
-              = link_to 'Edit', edit_customer_path(customer), class: "font-medium text-yellow-600 dark:text-yellow-500 hover:underline"
-              = button_to 'Delete', customer_path(customer), method: :delete, data: {turbo_confirm: 'Are you sure?'}, class: "font-medium text-red-600 dark:text-red-500 hover:underline bg-transparent border-0 p-0 cursor-pointer"
+              = link_to icon(:eye), customer_path(customer), title: "View Profile", class: "font-medium text-blue-600 dark:text-blue-500 hover:underline"
+              = link_to icon(:pencil), edit_customer_path(customer), title: "Edit Profile", class: "font-medium text-yellow-600 dark:text-yellow-500 hover:underline"
+              = button_to icon(:trash), customer_path(customer), title: "Delete Profile", method: :delete, data: {turbo_confirm: 'Are you sure?'}, class: "font-medium text-red-600 dark:text-red-500 hover:underline bg-transparent border-0 p-0 cursor-pointer"

@@ -27,7 +27,7 @@
               - else
                 %span.text-gray-400 0
 
-            %td.px-6.py-4.flex.space-x-3
-              = link_to 'View', product_path(product), class: "font-medium text-blue-600 dark:text-blue-500 hover:underline"
-              = link_to 'Edit', edit_product_path(product), class: "font-medium text-yellow-600 dark:text-yellow-500 hover:underline"
-              = button_to 'Delete', product_path(product), method: :delete, data: { turbo_confirm: 'Are you sure?' }, class: "font-medium text-red-600 dark:text-red-500 hover:underline bg-transparent border-0 p-0 cursor-pointer"
+            %td.px-6.py-4.flex.space-x-4
+              = link_to icon(:eye), product_path(product), title: "View Product", class: "font-medium text-blue-600 dark:text-blue-500 hover:underline"
+              = link_to icon(:pencil), edit_product_path(product), title: "Edit Details", class: "font-medium text-yellow-600 dark:text-yellow-500 hover:underline"
+              = button_to icon(:trash), product_path(product), title: "Delete Record", method: :delete, data: { turbo_confirm: 'Are you sure?' }, class: "font-medium text-red-600 dark:text-red-500 hover:underline bg-transparent border-0 p-0 cursor-pointer"

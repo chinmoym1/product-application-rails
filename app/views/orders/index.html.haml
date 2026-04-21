@@ -24,6 +24,6 @@
               %span.text-xs.font-medium.mr-2.px-2.5.py-0.5.rounded{class: (order.status == 'Completed' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800')}= order.status
             %td.px-6.py-4.font-medium.text-gray-900.dark:text-white= number_to_currency(order.total_amount, unit: "₹")
             %td.px-6.py-4.flex.space-x-3
-              = link_to 'View', order_path(order), class: "font-medium text-blue-600 dark:text-blue-500 hover:underline"
-              = link_to 'Edit', edit_order_path(order), class: "font-medium text-yellow-600 hover:underline"
-              = button_to 'Delete', order_path(order), method: :delete, data: {turbo_confirm: 'Are you sure?'}, class: "font-medium text-red-600 dark:text-red-500 hover:underline bg-transparent border-0 p-0 cursor-pointer"
+              = link_to icon(:eye), order_path(order), title: "View Details", class: "font-medium text-blue-600 dark:text-blue-500 hover:underline"
+              = link_to icon(:pencil), edit_order_path(order), title: "Edit Details", class: "font-medium text-yellow-600 hover:underline"
+              = button_to icon(:trash), order_path(order), title: "Delete Record", method: :delete, data: {turbo_confirm: 'Are you sure?'}, class: "font-medium text-red-600 dark:text-red-500 hover:underline bg-transparent border-0 p-0 cursor-pointer"
