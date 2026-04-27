@@ -1,5 +1,11 @@
 .container.mx-auto.px-4.py-8.max-w-2xl
   / --- HEADER (MOVED OUTSIDE THE FORM CARD) ---
+  - if @stock.errors.any?
+    .p-4.mb-4.text-sm.text-red-800.rounded-lg.bg-red-50.dark:bg-gray-800.dark:text-red-400
+      %span.font-medium Please fix the following errors:
+      %ul.list-disc.pl-5.mt-2
+        - @stock.errors.full_messages.each do |message|
+          %li= message
   .mb-8
     %h1.text-3xl.font-extrabold.text-gray-900.dark:text-white Receive New Shipment
     .flex.items-center.mt-3.space-x-3

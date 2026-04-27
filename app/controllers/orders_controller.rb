@@ -39,6 +39,7 @@ class OrdersController < ApplicationController
     calculate_total_amount
 
     if @order.save
+      OrderMailer.order_details(@order).deliver_later
       redirect_to order_url(@order), notice: "Order was successfully created."
     else
       # We must reload the customers list so the dropdown doesn't break if an error happens!

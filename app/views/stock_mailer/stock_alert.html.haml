@@ -1,0 +1,27 @@
+!!!
+%html
+  %body{style: "font-family: Arial, sans-serif; color: #333; max-w-xl; margin: 0 auto; padding: 20px;"}
+    %p Hello admin
+    %div{style: "border-left: 4px solid #EF4444; padding-left: 15px;"}
+      
+      %h2{style: "color: #EF4444; margin-top: 0;"} Low Stock Warning
+      
+      %p An inventory batch has dropped below the minimum threshold of 10 units. 
+      %p Please review the details below and consider reordering.
+      
+      %ul{style: "list-style-type: none; padding: 0;"}
+        %li 
+          %strong Product:
+          = @product.name
+        %li 
+          %strong SKU:
+          = @product.sku
+        %li 
+          %strong Current Quantity:
+          %span{style: "color: #EF4444; font-weight: bold;"}= @stock.quantity
+        %li 
+          %strong Supplier:
+          = @vendor.name
+          
+      %p{style: "margin-top: 20px;"}
+        %a{href: edit_stock_url(@stock), style: "display: inline-block; background-color: #4F46E5; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;"} Edit Stock Record

@@ -48,7 +48,7 @@
           
           .flex.items-center.space-x-4
             .text-right
-              - stock_color = @product.total_quantity > 0 ? 'text-green-600' : 'text-red-500'
+              - stock_color = @product.total_quantity >= 10 ? 'text-green-600' : 'text-red-500'
               %p.text-3xl.font-black{ class: stock_color }= @product.total_quantity
               %p.text-xs.font-bold.text-gray-500.uppercase Units Total
             

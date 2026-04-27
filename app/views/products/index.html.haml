@@ -22,7 +22,7 @@
             / NEW: Cleanly display the stock quantity instead of vendors
             %td.px-6.py-4
               - if product.stocks
-                - stock_color = product.total_quantity > 10 ? 'text-green-600' : 'text-red-600'
+                - stock_color = product.total_quantity >= 10 ? 'text-green-600' : 'text-red-600'
                 %span.font-bold{ class: stock_color }= product.total_quantity
               - else
                 %span.text-gray-400 0
