@@ -10,7 +10,8 @@ class Product < ApplicationRecord
   has_many :orders, through: :order_items
 
   validates :name, presence: true
-  validates :sku, presence: true, uniqueness: { scope: :user_id }
+  validates :sku, presence: true, uniqueness: { scope: :company_id }
+  validates :min_stock_value, presence: true, numericality: { greater_than_or_equal_to: 0 }
 
   has_many :stocks, dependent: :destroy
 
@@ -18,7 +19,6 @@ class Product < ApplicationRecord
     stocks.sum(:quantity)
   end
 
-  # FIFO Deduction (Oldest stock sold first)  
   def fulfill_order(order_item, quantity_ordered)
     remaining_to_deduct = quantity_ordered
     available_batches = stocks.where("quantity > 0").order(created_at: :asc)
@@ -26,18 +26,15 @@ class Product < ApplicationRecord
     available_batches.each do |batch|
       break if remaining_to_deduct <= 0
 
-      # Figure out how many we are taking from THIS specific batch
       quantity_taken_from_batch = [batch.quantity, remaining_to_deduct].min
 
-      # 1. LOG IT IN THE DATABASE (The Ledger)
       OrderItemAllocation.create!(
         order_item: order_item,
         stock: batch,
         quantity: quantity_taken_from_batch,
-        cost_price: batch.cost_price # We lock in the cost price historically!
+        cost_price: batch.cost_price 
       )
 
-      # 2. DO THE MATH
       batch.update!(quantity: batch.quantity - quantity_taken_from_batch)
       remaining_to_deduct -= quantity_taken_from_batch
     end
@@ -47,15 +44,12 @@ class Product < ApplicationRecord
     end
   end
 
-  # Handle Order Cancellations (Restocking)
   def restock(quantity_returned)
-    # Adds cancelled items back to your most recently updated batch
     latest_batch = stocks.order(updated_at: :desc).first
     
     if latest_batch
       latest_batch.update!(quantity: latest_batch.quantity + quantity_returned)
     else
-      # If no batches exist at all, create a generic return batch
       stocks.create!(quantity: quantity_returned, location: "Returns", vendor_id: nil)
     end
   end

@@ -1,12 +1,15 @@
 !!!
 %html
   %body{style: "font-family: Arial, sans-serif; color: #333; max-w-xl; margin: 0 auto; padding: 20px;"}
-    %p Hello admin
+    %p Hello admin,
     %div{style: "border-left: 4px solid #EF4444; padding-left: 15px;"}
       
       %h2{style: "color: #EF4444; margin-top: 0;"} Low Stock Warning
       
-      %p An inventory batch has dropped below the minimum threshold of 10 units. 
+      %p 
+        %strong An inventory batch has dropped below the minimum threshold of units:
+        #{@product.min_stock_value}
+
       %p Please review the details below and consider reordering.
       
       %ul{style: "list-style-type: none; padding: 0;"}

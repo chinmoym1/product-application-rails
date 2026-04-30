@@ -1,7 +1,5 @@
-/ Notice the transition-all class replacing transition-transform
 %aside#main-sidebar.w-64.bg-white.dark:bg-gray-800.border-r.border-gray-200.dark:border-gray-700.flex-shrink-0.flex.flex-col.fixed.inset-y-0.left-0.z-50.transform.-translate-x-full.md:relative.md:translate-x-0.transition-all.duration-300.ease-in-out
   
-  / Branding Area
   .h-16.flex.items-center.px-6.border-b.border-gray-200.dark:border-gray-700
     = link_to root_path, class: "flex items-center space-x-3" do
       %span.text-xl.font-black.tracking-tight.text-gray-900.dark:text-white Products Manager
@@ -9,14 +7,23 @@
   / Navigation Links
   .overflow-y-auto.flex-1.py-6.px-4
     %ul.space-y-2.font-medium
-      / Notice the new active: classes for mobile tap feedback!
-      %li
-        = link_to "Products", products_path, class: "flex items-center p-3 text-gray-700 rounded-xl dark:text-gray-300 hover:bg-gray-100 active:bg-gray-200 hover:text-indigo-600 active:text-indigo-700 dark:hover:bg-gray-700 dark:active:bg-gray-600 dark:hover:text-indigo-400 transition-colors group"
-      %li
-        = link_to "Vendors", vendors_path, class: "flex items-center p-3 text-gray-700 rounded-xl dark:text-gray-300 hover:bg-gray-100 active:bg-gray-200 hover:text-indigo-600 active:text-indigo-700 dark:hover:bg-gray-700 dark:active:bg-gray-600 dark:hover:text-indigo-400 transition-colors group"
-      %li
-        = link_to "Stocks", stocks_path, class: "flex items-center p-3 text-gray-700 rounded-xl dark:text-gray-300 hover:bg-gray-100 active:bg-gray-200 hover:text-indigo-600 active:text-indigo-700 dark:hover:bg-gray-700 dark:active:bg-gray-600 dark:hover:text-indigo-400 transition-colors group"
-      %li
-        = link_to "Orders", orders_path, class: "flex items-center p-3 text-gray-700 rounded-xl dark:text-gray-300 hover:bg-gray-100 active:bg-gray-200 hover:text-indigo-600 active:text-indigo-700 dark:hover:bg-gray-700 dark:active:bg-gray-600 dark:hover:text-indigo-400 transition-colors group"
-      %li
-        = link_to "Customers", customers_path, class: "flex items-center p-3 text-gray-700 rounded-xl dark:text-gray-300 hover:bg-gray-100 active:bg-gray-200 hover:text-indigo-600 active:text-indigo-700 dark:hover:bg-gray-700 dark:active:bg-gray-600 dark:hover:text-indigo-400 transition-colors group"
+
+      -if can? :read, Product
+        %li
+          = link_to "Products", products_path, class: "flex items-center p-3 text-gray-700 rounded-xl dark:text-gray-300 hover:bg-gray-100 active:bg-gray-200 hover:text-indigo-600 active:text-indigo-700 dark:hover:bg-gray-700 dark:active:bg-gray-600 dark:hover:text-indigo-400 transition-colors group"
+      
+      -if can? :read, Vendor
+        %li
+          = link_to "Vendors", vendors_path, class: "flex items-center p-3 text-gray-700 rounded-xl dark:text-gray-300 hover:bg-gray-100 active:bg-gray-200 hover:text-indigo-600 active:text-indigo-700 dark:hover:bg-gray-700 dark:active:bg-gray-600 dark:hover:text-indigo-400 transition-colors group"
+      
+      -if can? :read, Stock
+        %li
+          = link_to "Stocks", stocks_path, class: "flex items-center p-3 text-gray-700 rounded-xl dark:text-gray-300 hover:bg-gray-100 active:bg-gray-200 hover:text-indigo-600 active:text-indigo-700 dark:hover:bg-gray-700 dark:active:bg-gray-600 dark:hover:text-indigo-400 transition-colors group"
+      
+      -if can? :read, Order
+        %li
+          = link_to "Orders", orders_path, class: "flex items-center p-3 text-gray-700 rounded-xl dark:text-gray-300 hover:bg-gray-100 active:bg-gray-200 hover:text-indigo-600 active:text-indigo-700 dark:hover:bg-gray-700 dark:active:bg-gray-600 dark:hover:text-indigo-400 transition-colors group"
+      
+      -if can? :read, Customer
+        %li
+          = link_to "Customers", customers_path, class: "flex items-center p-3 text-gray-700 rounded-xl dark:text-gray-300 hover:bg-gray-100 active:bg-gray-200 hover:text-indigo-600 active:text-indigo-700 dark:hover:bg-gray-700 dark:active:bg-gray-600 dark:hover:text-indigo-400 transition-colors group"

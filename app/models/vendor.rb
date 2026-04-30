@@ -14,5 +14,5 @@ class Vendor < ApplicationRecord
   validates :phone, 
             presence: true, 
             format: { with: /\A\d{10}\z/, message: "must be exactly 10 digits" }, 
-            uniqueness: { scope: :user_id }
+            uniqueness: { scope: :company_id }
 end

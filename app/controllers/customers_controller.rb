@@ -1,8 +1,10 @@
 class CustomersController < ApplicationController
+  load_and_authorize_resource
+  
   before_action :set_customer, only: %i[ show edit update destroy ]
 
   def index
-    @customers = current_user.customers.order(created_at: :desc)
+    @customers = current_user.company.customers.order(created_at: :desc)
   end
 
   def show
@@ -11,14 +13,14 @@ class CustomersController < ApplicationController
   end
 
   def new
-    @customer = current_user.customers.build
+    @customer = current_user.company.customers.build
   end
 
   def edit
   end
 
   def create
-    @customer = current_user.customers.build(customer_params)
+    @customer = current_user.company.customers.build(customer_params)
 
     if @customer.save
       redirect_to customer_url(@customer), notice: "Customer was successfully created."
@@ -46,7 +48,7 @@ class CustomersController < ApplicationController
   private
 
   def set_customer
-    @customer = current_user.customers.find(params[:id])
+    @customer = current_user.company.customers.find(params[:id])
   end
 
   def customer_params

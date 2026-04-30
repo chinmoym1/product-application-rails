@@ -9,5 +9,16 @@ class User < ApplicationRecord
   has_many :customers, dependent: :destroy
   has_many :orders, dependent: :destroy
   has_many :stocks, through: :products, source: :stocks
+
+  belongs_to :company
+  belongs_to :role, optional: true
+
+  accepts_nested_attributes_for :company
   
+  after_initialize :set_default_role, if: :new_record?
+
+  def set_default_role
+    self.role ||= Role.find_by(name: 'Staff')
+  end
+
 end

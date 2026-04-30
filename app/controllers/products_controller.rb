@@ -1,23 +1,25 @@
 class ProductsController < ApplicationController
+  load_and_authorize_resource
+  
   before_action :set_product, only: %i[ show edit update destroy ]
   before_action :set_vendors, only: %i[ new edit create update ]
 
   def index
-    @products = current_user.products.includes(:stocks) 
+    @products = current_user.company.products.includes(:stocks) 
   end
 
   def show
   end
 
   def new
-    @product = current_user.products.build
+    @product = current_user.company.products.build
   end
 
   def edit
   end
 
   def create
-    @product = current_user.products.build(product_params)
+    @product = current_user.company.products.build(product_params)
 
     if @product.save      
       redirect_to product_url(@product), notice: "Product was successfully created."
@@ -45,14 +47,14 @@ class ProductsController < ApplicationController
   private
 
   def set_product
-    @product = current_user.products.find(params[:id])
+    @product = current_user.company.products.find(params[:id])
   end
 
   def set_vendors
-    @vendors = current_user.vendors
+    @vendors = current_user.company.vendors
   end
 
   def product_params
-    params.require(:product).permit(:name, :sku, :description, :price)
+    params.require(:product).permit(:name, :sku, :description, :price, :min_stock_value)
   end
 end

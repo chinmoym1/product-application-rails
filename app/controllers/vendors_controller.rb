@@ -1,22 +1,24 @@
 class VendorsController < ApplicationController
+  load_and_authorize_resource
+
   before_action :set_vendor, only: %i[ show edit update destroy ]
 
   def index
-    @vendors = current_user.vendors
+    @vendors = current_user.company.vendors
   end
 
   def show
   end
 
   def new
-    @vendor = current_user.vendors.build
+    @vendor = current_user.company.vendors.build
   end
 
   def edit
   end
 
   def create
-    @vendor = current_user.vendors.build(vendor_params)
+    @vendor = current_user.company.vendors.build(vendor_params)
 
     if @vendor.save
       redirect_to vendor_url(@vendor), notice: "Vendor was successfully created."
@@ -45,7 +47,7 @@ class VendorsController < ApplicationController
   private
 
   def set_vendor
-    @vendor = current_user.vendors.find(params[:id])
+    @vendor = current_user.company.vendors.find(params[:id])
   end
 
   def vendor_params

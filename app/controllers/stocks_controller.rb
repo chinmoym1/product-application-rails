@@ -1,9 +1,11 @@
 class StocksController < ApplicationController
+  load_and_authorize_resource
+
   before_action :authenticate_user!
   before_action :set_stock, only: %i[ show edit update destroy ]
 
   def index
-    @stocks = current_user.stocks.includes(:product, :vendor).order(updated_at: :desc)
+    @stocks = current_user.company.stocks.includes(:product, :vendor).order(updated_at: :desc)
   end
 
   def show
@@ -16,15 +18,14 @@ class StocksController < ApplicationController
   def new
     session[:stock_return_to] = request.referer
 
-    @product = current_user.products.find(params[:product_id])
+    @product = current_user.company.products.find(params[:product_id])
     @stock = @product.stocks.build
   end
 
   def create
-    @product = current_user.products.find(params[:product_id])
-    @stock = @product.stocks.build(stock_params)
+    @product = current_user.company.products.find(params[:product_id])
+    @stock = @product.company.stocks.build(stock_params)
 
-    # By default, a new shipment is handled by the current user's warehouse
     @stock.user_id = current_user.id if @stock.respond_to?(:user_id=)
 
     if @stock.save
@@ -57,7 +58,7 @@ class StocksController < ApplicationController
   private
 
   def set_stock
-    @stock = current_user.stocks.find(params[:id])
+    @stock = current_user.company.stocks.find(params[:id])
   rescue ActiveRecord::RecordNotFound
     redirect_to stocks_path, alert: "Stock record not found."
   end

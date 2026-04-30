@@ -1,13 +1,16 @@
 class OrdersController < ApplicationController
+
+  load_and_authorize_resource
+
   before_action :set_order, only: %i[ show edit update destroy ]
   before_action :set_dependencies, only: %i[ new edit create update ]
 
   def index
-    @orders = current_user.orders.includes(:customer).order(created_at: :desc)
+    @orders = current_user.company.orders.includes(:customer).order(created_at: :desc)
   end
 
   def show
-    @order = current_user.orders.includes(
+    @order = current_user.company.orders.includes(
       order_items: { 
         product: [], 
         order_item_allocations: { stock: :vendor } 
@@ -16,7 +19,7 @@ class OrdersController < ApplicationController
   end
 
   def new
-    @order = current_user.orders.build
+    @order = current_user.company.orders.build
     @order.order_items.build # Starts the form with one empty product row
   end
 
@@ -24,7 +27,7 @@ class OrdersController < ApplicationController
   end
 
   def create
-    @order = current_user.orders.build(order_params)
+    @order = current_user.company.orders.build(order_params)
 
     if params[:order][:customer_email].present?
       clean_email = params[:order][:customer_email].strip.downcase
@@ -42,7 +45,6 @@ class OrdersController < ApplicationController
       OrderMailer.order_details(@order).deliver_later
       redirect_to order_url(@order), notice: "Order was successfully created."
     else
-      # We must reload the customers list so the dropdown doesn't break if an error happens!
       @customers = current_user.customers 
       render :new, status: :unprocessable_entity
     end
@@ -70,12 +72,12 @@ class OrdersController < ApplicationController
   private
 
   def set_order
-    @order = current_user.orders.find(params[:id])
+    @order = current_user.company.orders.find(params[:id])
   end
 
   def set_dependencies
-    @customers = current_user.customers
-    @products = current_user.products
+    @customers = current_user.company.customers
+    @products = current_user.company.products
   end
 
   def calculate_total_amount
