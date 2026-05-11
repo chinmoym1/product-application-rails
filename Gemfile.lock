@@ -116,6 +116,9 @@ GEM
       railties (>= 7.0)
       responders
       warden (~> 1.2.3)
+    devise_invitable (2.0.11)
+      actionmailer (>= 5.0)
+      devise (>= 4.6)
     drb (2.2.3)
     erb (4.0.4)
       cgi (>= 0.3.3)
@@ -188,6 +191,7 @@ GEM
     nokogiri (1.18.10-x86_64-linux-musl)
       racc (~> 1.4)
     orm_adapter (0.5.0)
+    pagy (9.4.0)
     pg (1.6.3)
     pg (1.6.3-aarch64-linux)
     pg (1.6.3-aarch64-linux-musl)
@@ -321,10 +325,12 @@ DEPENDENCIES
   cssbundling-rails
   debug
   devise (~> 5.0)
+  devise_invitable (~> 2.0.0)
   error_highlight (>= 0.4.0)
   haml-rails
   jbuilder
   jsbundling-rails
+  pagy
   pg (~> 1.1)
   puma (>= 5.0)
   rails (~> 7.1.6)

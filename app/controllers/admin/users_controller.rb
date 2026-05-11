@@ -1,0 +1,62 @@
+class Admin::UsersController < ApplicationController
+  before_action :authenticate_user!
+  before_action :require_admin!
+
+  def index
+    @users = current_user.company.users.includes(:role).order(created_at: :desc)
+  end
+
+  def new
+    @user = User.new
+  end
+
+  def create
+    @user = User.invite!(invite_params, current_user)
+    if @user.errors.empty?
+      redirect_to admin_users_path, notice: "Invitation securely sent to #{@user.email}."
+    else
+      render :new, status: :unprocessable_entity
+    end
+  end
+
+  def edit
+    @user = current_user.company.users.find(params[:id])
+  end
+
+  def update
+    @user = current_user.company.users.find(params[:id])
+
+    if params[:user][:password].blank? && params[:user][:password_confirmation].blank?
+      params[:user].delete(:password)
+      params[:user].delete(:password_confirmation)
+    end
+
+    if @user.update(user_params)
+      redirect_to admin_users_path, notice: "User was successfully updated."
+    else
+      render :edit, status: :unprocessable_entity
+    end
+  end
+
+  def destroy
+    @user = current_user.company.users.find(params[:id])
+    @user.destroy
+    redirect_to admin_users_path, notice: "User deleted."
+  end
+
+  private
+
+  def require_admin!
+    unless current_user.role&.name == 'Admin'
+      redirect_to root_path, alert: "Access denied. Admins only."
+    end
+  end
+
+  def user_params
+    params.require(:user).permit(:email, :role_id, :password, :password_confirmation)
+  end
+
+  def invite_params
+    params.require(:user).permit(:email, :role_id).merge(company_id: current_user.company_id)
+  end
+end

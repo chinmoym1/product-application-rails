@@ -6,7 +6,25 @@ class OrdersController < ApplicationController
   before_action :set_dependencies, only: %i[ new edit create update ]
 
   def index
-    @orders = current_user.company.orders.includes(:customer).order(created_at: :desc)
+    # @orders = current_user.company.orders.includes(:customer).order(created_at: :desc)
+    base_query = current_user.company.orders.includes(:customer).references(:customer).order(created_at: :desc)
+
+    if params[:query].present?
+      raw_query = params[:query].downcase.strip
+      
+      id_term = raw_query.gsub(/[^0-9]/, '')
+      id_term = id_term.to_i.to_s if id_term.present?
+
+      @orders_query = base_query.where(
+        "orders.id::text LIKE :id_query OR LOWER(customers.email) LIKE :email_query", 
+        id_query: "%#{id_term}%",
+        email_query: "%#{raw_query}%"
+      )
+    else
+      @orders_query = base_query
+    end
+
+    @pagy, @orders = pagy(@orders_query)
   end
 
   def show
@@ -20,7 +38,7 @@ class OrdersController < ApplicationController
 
   def new
     @order = current_user.company.orders.build
-    @order.order_items.build # Starts the form with one empty product row
+    @order.order_items.build 
   end
 
   def edit
@@ -29,11 +47,12 @@ class OrdersController < ApplicationController
   def create
     @order = current_user.company.orders.build(order_params)
 
+    @order.user = current_user
+
     if params[:order][:customer_email].present?
       clean_email = params[:order][:customer_email].strip.downcase
       
-      @order.customer = current_user.customers.find_or_create_by!(email: clean_email) do |new_customer|
-        # Auto-generates a clean name like "John Doe" from "john.doe@gmail.com"
+      @order.customer = current_user.company.customers.find_or_create_by!(email: clean_email) do |new_customer|
         raw_name = clean_email.split('@').first
         new_customer.name = raw_name.tr('._-', ' ').titleize
       end
@@ -45,7 +64,7 @@ class OrdersController < ApplicationController
       OrderMailer.order_details(@order).deliver_later
       redirect_to order_url(@order), notice: "Order was successfully created."
     else
-      @customers = current_user.customers 
+      @customers = current_user.company.customers 
       render :new, status: :unprocessable_entity
     end
   end

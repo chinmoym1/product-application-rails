@@ -27,3 +27,10 @@
       -if can? :read, Customer
         %li
           = link_to "Customers", customers_path, class: "flex items-center p-3 text-gray-700 rounded-xl dark:text-gray-300 hover:bg-gray-100 active:bg-gray-200 hover:text-indigo-600 active:text-indigo-700 dark:hover:bg-gray-700 dark:active:bg-gray-600 dark:hover:text-indigo-400 transition-colors group"
+      
+      -# - if can? :update, current_user.company
+      -#   %li
+      -#     = link_to "Company Settings", edit_company_path, class: "text-gray-700 hover:text-blue-600 px-3 py-2"
+      - if current_user.role&.name == 'Admin'
+        %li
+          = link_to "Manage Users", admin_users_path, class: "flex items-center p-3 text-gray-700 rounded-xl dark:text-gray-300 hover:bg-gray-100 active:bg-gray-200 hover:text-indigo-600 active:text-indigo-700 dark:hover:bg-gray-700 dark:active:bg-gray-600 dark:hover:text-indigo-400 transition-colors group"

@@ -1,0 +1,38 @@
+.container.mx-auto.px-4.py-8
+  .flex.justify-between.items-center.mb-6
+    %h1.text-3xl.font-bold.text-gray-900.dark:text-white Manage Users
+    = link_to 'Invite Team Member', new_admin_user_path, class: "text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+
+  .relative.overflow-x-auto.shadow-md.sm:rounded-lg
+    %table.w-full.text-sm.text-left.text-gray-500.dark:text-gray-400
+      %thead.text-xs.text-gray-700.uppercase.bg-gray-50.dark:bg-gray-700.dark:text-gray-400
+        %tr
+          %th.px-6.py-3{scope: "col"} Email
+          %th.px-6.py-3{scope: "col"} Company
+          %th.px-6.py-3{scope: "col"} Role
+          %th.px-6.py-3{scope: "col"} Actions
+          
+      %tbody
+        - @users.each do |user|
+          %tr.bg-white.border-b.dark:bg-gray-800.dark:border-gray-700.hover:bg-gray-50.dark:hover:bg-gray-600
+            %th.px-6.py-4.font-medium.text-gray-900.whitespace-nowrap.dark:text-white{scope: "row"}= user.email
+            
+            %td.px-6.py-4
+              - if user.company
+                %span.bg-blue-100.text-blue-800.text-xs.font-medium.px-2.5.py-0.5.rounded.dark:bg-blue-900.dark:text-blue-300
+                  = user.company.name
+              - else
+                %span.text-gray-400 Unassigned
+                
+            %td.px-6.py-4
+              - if user.role
+                %span.bg-green-100.text-green-800.text-xs.font-medium.px-2.5.py-0.5.rounded.dark:bg-green-900.dark:text-green-300
+                  = user.role.name
+              - else
+                %span.text-gray-400 None
+
+            %td.px-6.py-2.flex.space-x-4.items-center.mt-2
+              = link_to icon(:pencil), edit_admin_user_path(user), title: "Edit Details", class: "font-medium text-yellow-600 dark:text-yellow-500 hover:underline"
+              
+              - if user != current_user
+                = button_to icon(:trash), admin_user_path(user), title: "Delete Record", method: :delete, data: { turbo_confirm: 'Are you sure?' }, class: "font-medium text-red-600 dark:text-red-500 hover:underline bg-transparent border-0 p-0 cursor-pointer"

@@ -13,6 +13,12 @@ Rails.application.routes.draw do
   resources :stocks
   resources :orders
   resources :customers
+
+  namespace :admin do
+    resources :users, only: [:index, :new, :create, :edit, :update, :destroy]
+  end
+
+  resource :company, only: [:show, :edit, :update]
     
   # get 'products/index'
   # get 'products/show'
