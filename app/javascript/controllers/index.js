@@ -10,5 +10,8 @@ application.register("hello", HelloController)
 import NestedFormController from "./nested_form_controller"
 application.register("nested-form", NestedFormController)
 
+import NotificationController from "./notification_controller"
+application.register("notification", NotificationController)
+
 import ProductPricingController from "./product_pricing_controller"
 application.register("product-pricing", ProductPricingController)
