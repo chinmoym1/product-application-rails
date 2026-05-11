@@ -5,8 +5,22 @@ class ProductsController < ApplicationController
   before_action :set_vendors, only: %i[ new edit create update ]
 
   def index
-    @products = current_user.company.products.includes(:stocks) 
+    base_query = current_user.company.products.includes(:stocks).order(created_at: :desc)
+
+    if params[:query].present?
+      search_term = "%#{params[:query].downcase.strip}%"
+
+      @products_query = base_query.where(
+        "LOWER(name) LIKE :q OR LOWER(sku) LIKE :q", 
+        q: search_term
+      )
+    else
+      @products_query = base_query
+    end
+
+    @pagy, @products = pagy(@products_query)
   end
+
 
   def show
   end
@@ -20,6 +34,8 @@ class ProductsController < ApplicationController
 
   def create
     @product = current_user.company.products.build(product_params)
+
+    @product.user = current_user
 
     if @product.save      
       redirect_to product_url(@product), notice: "Product was successfully created."

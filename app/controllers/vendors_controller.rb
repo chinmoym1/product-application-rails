@@ -4,7 +4,19 @@ class VendorsController < ApplicationController
   before_action :set_vendor, only: %i[ show edit update destroy ]
 
   def index
-    @vendors = current_user.company.vendors
+    base_query = current_user.company.vendors.order(created_at: :desc)
+
+    if params[:query].present?
+      search_term = "%#{params[:query].downcase.strip}%"
+      @vendors_query = base_query.where(
+        "LOWER(name) LIKE :q OR LOWER(email) LIKE :q", 
+        q: search_term
+      )
+    else
+      @vendors_query = base_query
+    end
+
+    @pagy, @vendors = pagy(@vendors_query)
   end
 
   def show
@@ -19,6 +31,8 @@ class VendorsController < ApplicationController
 
   def create
     @vendor = current_user.company.vendors.build(vendor_params)
+
+    @vendor.user = current_user
 
     if @vendor.save
       redirect_to vendor_url(@vendor), notice: "Vendor was successfully created."

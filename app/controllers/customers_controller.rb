@@ -4,12 +4,25 @@ class CustomersController < ApplicationController
   before_action :set_customer, only: %i[ show edit update destroy ]
 
   def index
-    @customers = current_user.company.customers.order(created_at: :desc)
+    base_query = current_user.company.customers.order(created_at: :desc)
+
+    if params[:query].present?
+      search_term = "%#{params[:query].downcase.strip}%"
+      @customers_query = base_query.where(
+        "LOWER(name) LIKE :q OR LOWER(email) LIKE :q", 
+        q: search_term
+      )
+    else
+      @customers_query = base_query
+    end
+
+    @pagy, @customers = pagy(@customers_query)
   end
 
   def show
     # Fetch all orders
     @orders = @customer.orders.order(created_at: :desc)
+    
   end
 
   def new
@@ -21,6 +34,8 @@ class CustomersController < ApplicationController
 
   def create
     @customer = current_user.company.customers.build(customer_params)
+
+    @customer.user = current_user
 
     if @customer.save
       redirect_to customer_url(@customer), notice: "Customer was successfully created."

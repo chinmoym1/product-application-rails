@@ -9,7 +9,7 @@
     
     .flex.items-center.space-x-3.mt-4.md:mt-0
       / BACK BUTTON
-      = link_to products_path, class: "inline-flex items-center px-4 py-2.5 text-sm font-medium text-gray-900 bg-gray-100 border border-gray-300 rounded-lg rounded-lg hover:bg-gray-200 focus:ring-1 focus:ring-gray-200 dark:bg-gray-700 dark:text-white dark:hover:bg-gray-600 transition-colors" do
+      = link_to "javascript:history.back()", class: "inline-flex items-center px-4 py-2.5 text-sm font-medium text-gray-900 bg-gray-100 border border-gray-300 rounded-lg rounded-lg hover:bg-gray-200 focus:ring-1 focus:ring-gray-200 dark:bg-gray-700 dark:text-white dark:hover:bg-gray-600 transition-colors" do
         %svg.w-4.h-4.mr-2{"fill" => "none", "stroke" => "currentColor", "viewBox" => "0 0 24 24"}
           %path{"stroke-linecap" => "round", "stroke-linejoin" => "round", "stroke-width" => "2", "d" => "M10 19l-7-7m0 0l7-7m-7 7h18"}
         Back

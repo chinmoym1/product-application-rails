@@ -1,7 +1,6 @@
 .container.mx-auto.px-4.py-8
   .grid.grid-cols-1.md:grid-cols-3.gap-6
     
-    / Customer Details Card (Left Column)
     .col-span-1
       .bg-white.border.border-gray-200.rounded-lg.shadow.p-6.dark:bg-gray-800.dark:border-gray-700
         .flex.flex-col.items-center.pb-6
@@ -14,7 +13,6 @@
           = link_to 'Edit Profile', edit_customer_path(@customer), class: "inline-flex items-center px-4 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
           = link_to 'Back', customers_path, class: "inline-flex items-center px-4 py-2 text-sm font-medium text-center text-gray-900 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-700 dark:focus:ring-gray-700"
 
-    / Order History (Right Column)
     .col-span-1.md:col-span-2
       .bg-white.border.border-gray-200.rounded-lg.shadow.p-6.dark:bg-gray-800.dark:border-gray-700
         %h3.text-xl.font-bold.text-gray-900.dark:text-white.mb-4 Order History

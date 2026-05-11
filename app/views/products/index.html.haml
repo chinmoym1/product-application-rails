@@ -3,39 +3,51 @@
     %h1.text-3xl.font-bold.text-gray-900.dark:text-white Products Catalog
     -if can? :manage, Product
       = link_to 'Add Product', new_product_path, class: "text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+  
+  .mb-6.bg-white.p-4.rounded-lg.shadow-sm.border.border-gray-200.dark:bg-gray-800.dark:border-gray-700
+    = form_with url: products_path, method: :get, data: { turbo_frame: "products_table", turbo_action: "advance" }, class: "flex items-center space-x-3" do |f|
+      .flex-grow
+        = f.text_field :query, value: params[:query], placeholder: "Search by Product Name or SKU...", oninput: "this.form.requestSubmit()", class: "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+      
+      = f.submit "Search", class: "hidden"
 
-  .relative.overflow-x-auto.shadow-md.sm:rounded-lg
-    %table.w-full.text-sm.text-left.text-gray-500.dark:text-gray-400
-      %thead.text-xs.text-gray-700.uppercase.bg-gray-50.dark:bg-gray-700.dark:text-gray-400
-        %tr
-          %th.px-6.py-3{scope: "col"} Product Name
-          %th.px-6.py-3{scope: "col"} SKU
-          %th.px-6.py-3{scope: "col"} Retail Price
-          %th.px-4.py-3{scope: "col"} In Stock
-          %th.px-2.py-3{scope: "col"} Minimum Stock
-          %th.px-6.py-3{scope: "col"} Actions
-      %tbody
-        - @products.each do |product|
-          %tr.bg-white.border-b.dark:bg-gray-800.dark:border-gray-700.hover:bg-gray-50.dark:hover:bg-gray-600
-            %th.px-6.py-4.font-medium.text-gray-900.whitespace-nowrap.dark:text-white{scope: "row"}= product.name
-            %td.px-6.py-4= product.sku
-            %td.px-6.py-4= number_to_currency(product.price, unit: "₹" )
-            
-            %td.px-6.py-4
-              - if product.stocks
-                - stock_color = product.total_quantity >= product.min_stock_value ? 'text-green-600' : 'text-red-600'
-                %span.font-bold{ class: stock_color }= product.total_quantity
-              - else
-                %span.text-gray-400 0
-            
-            %td.px-12.py-4
-              - if product.min_stock_value
-                - stock_color = 'text-blue-300'
-                %span.font-bold{ class: stock_color }= product.min_stock_value
-              - else
-                %span.text-gray-400 0
+  = turbo_frame_tag "products_table" do
+    .relative.overflow-x-auto.shadow-md.sm:rounded-lg
+      %table.w-full.text-sm.text-left.text-gray-500.dark:text-gray-400
+        %thead.text-xs.text-gray-700.uppercase.bg-gray-50.dark:bg-gray-700.dark:text-gray-400
+          %tr
+            %th.px-6.py-3{scope: "col"} Product Name
+            %th.px-6.py-3{scope: "col"} SKU
+            %th.px-6.py-3{scope: "col"} Retail Price
+            %th.px-4.py-3{scope: "col"} In Stock
+            %th.px-2.py-3{scope: "col"} Minimum Stock
+            %th.px-6.py-3{scope: "col"} Actions
+        %tbody
+          - @products.each do |product|
+            %tr.bg-white.border-b.dark:bg-gray-800.dark:border-gray-700.hover:bg-gray-50.dark:hover:bg-gray-500
+              %th.px-6.py-4.font-medium.text-gray-900.whitespace-nowrap.dark:text-white{scope: "row"}= product.name
+              %td.px-6.py-4= product.sku
+              %td.px-6.py-4= number_to_currency(product.price, unit: "₹" )
+              
+              %td.px-6.py-4
+                - if product.stocks
+                  - stock_color = product.total_quantity >= product.min_stock_value ? 'text-green-600' : 'text-red-600'
+                  %span.font-bold{ class: stock_color }= product.total_quantity
+                - else
+                  %span.text-gray-400 0
+              
+              %td.px-12.py-4
+                - if product.min_stock_value
+                  - stock_color = 'text-blue-300'
+                  %span.font-bold{ class: stock_color }= product.min_stock_value
+                - else
+                  %span.text-gray-400 0
 
-            %td.px-6.py-2.flex.space-x-4
-              = link_to icon(:eye), product_path(product), title: "View Product", class: "font-medium text-blue-600 dark:text-blue-500 hover:underline"
-              = link_to icon(:pencil), edit_product_path(product), title: "Edit Details", class: "font-medium text-yellow-600 dark:text-yellow-500 hover:underline"
-              = button_to icon(:trash), product_path(product), title: "Delete Record", method: :delete, data: { turbo_confirm: 'Are you sure?' }, class: "font-medium text-red-600 dark:text-red-500 hover:underline bg-transparent border-0 p-0 cursor-pointer"
+              %td.px-6.py-2.flex.space-x-4
+                = link_to icon(:eye), product_path(product), title: "View Product", data: { turbo_frame: "_top" }, class: "font-medium text-blue-600 dark:text-blue-500 hover:underline"
+                = link_to icon(:pencil), edit_product_path(product), title: "Edit Details", data: { turbo_frame: "_top" }, class: "font-medium text-yellow-600 dark:text-yellow-500 hover:underline"
+                = button_to icon(:trash), product_path(product), title: "Delete Record", method: :delete, data: { turbo_confirm: 'Are you sure?' }, class: "font-medium text-red-600 dark:text-red-500 hover:underline bg-transparent border-0 p-0 cursor-pointer"
+    
+    - if @pagy.pages > 1
+      .mt-6.flex.justify-center
+        = custom_pagy_nav(@pagy)

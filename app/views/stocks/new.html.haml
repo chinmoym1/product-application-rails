@@ -1,5 +1,4 @@
 .container.mx-auto.px-4.py-8.max-w-2xl
-  / --- HEADER (MOVED OUTSIDE THE FORM CARD) ---
   - if @stock.errors.any?
     .p-4.mb-4.text-sm.text-red-800.rounded-lg.bg-red-50.dark:bg-gray-800.dark:text-red-400
       %span.font-medium Please fix the following errors:
@@ -11,18 +10,16 @@
     .flex.items-center.mt-3.space-x-3
       %span.text-sm.font-medium.text-gray-500.dark:text-gray-400 Logging shipment for:
       
-      / HIGHLIGHTED PRODUCT NAME & SKU
       %span.text-lg.font-black.text-blue-600.dark:text-blue-400= @product.name
       %span.bg-indigo-100.text-indigo-800.text-xs.font-bold.px-2.py-1.rounded.dark:bg-indigo-900.dark:text-indigo-300
         SKU: #{@product.sku}
 
-  / --- THE FORM CARD ---
   .bg-white.rounded-2xl.shadow-sm.border.border-gray-200.p-8.dark:bg-gray-800.dark:border-gray-700
     = form_with(model: [@product, @stock], local: true, class: "space-y-6") do |f|
       
       %div
         = f.label :vendor_id, "Purchased From (Vendor)", class: "block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-        = f.collection_select :vendor_id, current_user.vendors, :id, :name, { prompt: "Select the supplier..." }, class: "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white", required: true
+        = f.collection_select :vendor_id, @vendors, :id, :name, { prompt: "Choose a vendor" }, class: "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white", required: true
       
       .grid.grid-cols-1.md:grid-cols-2.gap-6
         %div
