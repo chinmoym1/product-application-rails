@@ -108,7 +108,8 @@ Rails.application.configure do
       password:             ENV['GMAIL_PASSWORD'],      
       authentication:       'plain',
       tls:                  true,
-      enable_starttls_auto: false
+      open_timeout:         5,
+      read_timeout:         5
     }
 
 end
