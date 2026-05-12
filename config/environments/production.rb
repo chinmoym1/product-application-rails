@@ -102,7 +102,7 @@ Rails.application.configure do
     config.action_mailer.delivery_method = :smtp
     config.action_mailer.smtp_settings = {
       address:              'smtp.mailersend.net',
-      port:                 587,
+      port:                 465,
       user_name:            ENV['MAILERSEND_USERNAME'],
       password:             ENV['MAILERSEND_API_KEY'],
       authentication:       'plain',
