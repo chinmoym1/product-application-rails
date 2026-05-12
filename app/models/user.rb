@@ -15,12 +15,6 @@ class User < ApplicationRecord
 
   accepts_nested_attributes_for :company
   
-  after_initialize :set_default_role, if: :new_record?
-
-  def set_default_role
-    self.role ||= Role.find_by(name: 'Staff')
-  end
-
   def send_devise_notification(notification, *args)
     devise_mailer.send(notification, self, *args).deliver_later
   end

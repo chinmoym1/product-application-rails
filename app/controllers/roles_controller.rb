@@ -32,9 +32,18 @@ class RolesController < ApplicationController
     end
   end
 
+  def destroy
+    if @role.name == 'Admin'
+      redirect_to roles_path, alert: "You cannot delete the core Admin role."
+    else
+      @role.destroy
+      redirect_to roles_path, notice: "Role was successfully deleted."
+    end
+  end
+
   private
 
   def role_params
-    params.require(:role).permit(:name, :description)
+    params.require(:role).permit(:name, :description, permission_ids: [])
   end
 end

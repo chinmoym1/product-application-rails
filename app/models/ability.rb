@@ -44,14 +44,24 @@ class Ability
 
     return unless user.present? && user.role.present? && user.company_id.present?
 
+    if user.role.name == 'Admin'
+      can :manage, :all, company_id: user.company_id
+      can :manage, Company, id: user.company_id 
+      return 
+    end
+
     user.role.permissions.each do |permission|
-      
       action = permission.action.to_sym 
 
       if permission.subject_class == "all"
         can action, :all, company_id: user.company_id
       else
-        can action, permission.subject_class.constantize, company_id: user.company_id
+        begin
+          subject = permission.subject_class.constantize
+          can action, subject, company_id: user.company_id
+        rescue NameError
+          next 
+        end
       end
     end
       

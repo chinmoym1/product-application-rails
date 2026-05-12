@@ -13,6 +13,7 @@ Rails.application.routes.draw do
   resources :stocks
   resources :orders
   resources :customers
+  resources :roles, except: [:show]
 
   namespace :admin do
     resources :users, only: [:index, :new, :create, :edit, :update, :destroy]
