@@ -95,11 +95,7 @@ Rails.application.configure do
   # Skip DNS rebinding protection for the default health check endpoint.
   # config.host_authorization = { exclude: ->(request) { request.path == "/up" } }
 
-    config.action_mailer.delivery_method = :mailersend
-
-    config.action_mailer.mailersend_settings = {
-      api_token: ENV['MAILERSEND_API_KEY']
-    }
+    config.action_mailer.delivery_method = :resend
 
     config.action_mailer.default_url_options = { host: 'https://product-app-iknh.onrender.com', protocol: 'https' }
     
