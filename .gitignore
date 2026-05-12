@@ -38,4 +38,4 @@
 /node_modules
 
 /config/database.yml
-/config/environments/development.rb
+# /config/environments/development.rb
