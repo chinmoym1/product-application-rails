@@ -101,15 +101,12 @@ Rails.application.configure do
 
     config.action_mailer.delivery_method = :smtp
     config.action_mailer.smtp_settings = {
-      address:              'smtp.gmail.com',
-      port:                 465,
-      domain:               'gmail.com',
-      user_name:            ENV['GMAIL_USERNAME'], 
-      password:             ENV['GMAIL_PASSWORD'],      
+      address:              'smtp.mailersend.net',
+      port:                 587,
+      user_name:            ENV['MAILERSEND_USERNAME'],
+      password:             ENV['MAILERSEND_API_KEY'],
       authentication:       'plain',
-      tls:                  true,
-      open_timeout:         5,
-      read_timeout:         5
-    }
+      enable_starttls_auto: true
+  }
 
 end
