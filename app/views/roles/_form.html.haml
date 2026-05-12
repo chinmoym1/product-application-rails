@@ -1,26 +1,42 @@
 = form_with(model: @role, local: true, class: "space-y-6") do |f|
+  
   - if @role.errors.any?
-    .bg-red-50.text-red-600.p-4.rounded-lg
+    .bg-red-50.dark:bg-red-900/30.text-red-600.dark:text-red-400.p-4.rounded-lg
       %ul
         - @role.errors.full_messages.each do |msg|
           %li= msg
 
   .mb-4
-    = f.label :name, "Role Name (e.g., Manager, Editor)", class: "block mb-2 text-sm font-medium"
-    = f.text_field :name, class: "bg-gray-50 border border-gray-300 rounded-lg w-full p-2.5", required: true
+    = f.label :name, "Role Name (e.g., Manager, Editor)", class: "block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+    = f.text_field :name, class: "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500", required: true
 
   .mb-4
-    = f.label :description, "Description", class: "block mb-2 text-sm font-medium"
-    = f.text_area :description, class: "bg-gray-50 border border-gray-300 rounded-lg w-full p-2.5"
+    = f.label :description, "Description", class: "block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+    = f.text_area :description, class: "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
 
   .mb-6
-    %h3.text-lg.font-medium.mb-3 Assign Permissions
-    .grid.grid-cols-1.md:grid-cols-2.gap-4.bg-white.p-4.border.rounded-lg
-      = f.collection_check_boxes :permission_ids, Permission.all, :id, :name do |b|
-        .flex.items-center
-          = b.check_box class: "w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
-          = b.label class: "ml-2 text-sm font-medium text-gray-900"
+    %h3.text-lg.font-medium.mb-3.text-gray-900.dark:text-white Access Control
+    
+    .bg-white.dark:bg-gray-800.border.border-gray-200.dark:border-gray-700.rounded-lg.overflow-hidden
+      %table.w-full.text-sm.text-left.text-gray-500.dark:text-gray-400
+        
+        %thead.text-xs.text-gray-700.uppercase.bg-gray-50.dark:bg-gray-700.dark:text-gray-400
+          %tr
+            %th.px-6.py-3 Module
+            %th.px-6.py-3 View Only (Read)
+            %th.px-6.py-3 Full Access (Manage)
+            
+        %tbody
+          - ['Product', 'Vendor', 'Stock', 'Order', 'Customer', 'User', 'Role'].each do |model|
+            %tr.border-t.border-gray-200.dark:border-gray-700
+              %td.px-6.py-4.font-medium.text-gray-900.dark:text-white= model
+              
+              %td.px-6.py-4
+                = check_box_tag "permissions[#{model}][]", "read", @role.permissions.exists?(subject_class: model, action: 'read'), class: "w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600 cursor-pointer"
+              
+              %td.px-6.py-4
+                = check_box_tag "permissions[#{model}][]", "manage", @role.permissions.exists?(subject_class: model, action: 'manage'), class: "w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600 cursor-pointer"
 
-  .mt-6
-    = f.submit "Save Role", class: "text-white bg-blue-700 hover:bg-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 cursor-pointer"
-    = link_to "Cancel", roles_path, class: "ml-4 text-gray-600 hover:underline"
+  .mt-6.flex.items-center
+    = f.submit "Save Role", class: "text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 cursor-pointer"
+    = link_to "Cancel", roles_path, class: "ml-4 text-gray-600 dark:text-gray-400 hover:underline font-medium"
