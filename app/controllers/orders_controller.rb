@@ -55,6 +55,8 @@ class OrdersController < ApplicationController
       @order.customer = current_user.company.customers.find_or_create_by!(email: clean_email) do |new_customer|
         raw_name = clean_email.split('@').first
         new_customer.name = raw_name.tr('._-', ' ').titleize
+
+        new_customer.user = current_user
       end
     end
 
