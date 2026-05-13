@@ -1,5 +1,5 @@
 class StockMailer < ApplicationMailer
-  default from: 'notifications@productinfo.Pvt.Ltd'
+  default from: 'onboarding@resend.dev'
 
   def stock_alert(stock)
     @stock = stock

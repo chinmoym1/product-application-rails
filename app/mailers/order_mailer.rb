@@ -1,5 +1,5 @@
 class OrderMailer < ApplicationMailer
-  default from: "notifications@productinfo.Pvt.Ltd"
+  default from: "onboarding@resend.dev"
 
   def order_details(order)
     @order = order
