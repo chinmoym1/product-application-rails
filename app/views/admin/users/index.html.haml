@@ -1,7 +1,17 @@
 .container.mx-auto.px-4.py-8
-  .flex.justify-between.items-center.mb-6
+  .flex.flex-col.md:flex-row.justify-between.items-center.mb-6.gap-4
     %h1.text-3xl.font-bold.text-gray-900.dark:text-white Manage Users
-    = link_to 'Invite Team Member', new_admin_user_path, class: "text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+    
+    .flex.gap-3
+      = link_to new_invite_admin_users_path, class: "flex items-center text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 transition-colors" do
+        %svg.w-4.h-4.mr-2{fill: "none", stroke: "currentColor", viewBox: "0 0 24 24"}
+          %path{d: "M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z", "stroke-linecap" => "round", "stroke-linejoin" => "round", "stroke-width" => "2"}
+        Send Invite
+
+      = link_to new_admin_user_path, class: "flex items-center text-white bg-green-600 hover:bg-green-700 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-green-500 dark:hover:bg-green-600 focus:outline-none dark:focus:ring-green-800 transition-colors" do
+        %svg.w-4.h-4.mr-2{fill: "none", stroke: "currentColor", viewBox: "0 0 24 24"}
+          %path{d: "M12 6v6m0 0v6m0-6h6m-6 0H6", "stroke-linecap" => "round", "stroke-linejoin" => "round", "stroke-width" => "2"}
+        Add User
 
   .relative.overflow-x-auto.shadow-md.sm:rounded-lg
     %table.w-full.text-sm.text-left.text-gray-500.dark:text-gray-400

@@ -11,11 +11,26 @@ class Admin::UsersController < ApplicationController
   end
 
   def create
+    @user = current_user.company.users.build(user_params)
+    
+    if @user.save
+      redirect_to admin_users_path, notice: "User was successfully created directly."
+    else
+      render :new, status: :unprocessable_entity
+    end
+  end
+
+  def new_invite
+    @user = User.new
+  end
+
+  def send_invite
     @user = User.invite!(invite_params, current_user)
+    
     if @user.errors.empty?
       redirect_to admin_users_path, notice: "Invitation securely sent to #{@user.email}."
     else
-      render :new, status: :unprocessable_entity
+      render :new_invite, status: :unprocessable_entity
     end
   end
 

@@ -16,7 +16,12 @@ Rails.application.routes.draw do
   resources :roles, except: [:show]
 
   namespace :admin do
-    resources :users, only: [:index, :new, :create, :edit, :update, :destroy]
+    resources :users do
+      collection do
+        get :new_invite
+        post :send_invite
+      end
+    end
   end
 
   resource :company, only: [:show, :edit, :update]
