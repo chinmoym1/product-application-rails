@@ -3,7 +3,20 @@ class Admin::UsersController < ApplicationController
   before_action :require_admin!
 
   def index
-    @users = current_user.company.users.includes(:role).order(created_at: :desc)
+    base_query = current_user.company.users.includes(:role).order(created_at: :desc)
+
+    if params[:query].present?
+      search_term = "%#{params[:query].downcase.strip}%"
+
+      @users_query = base_query.where(
+        "LOWER(email) LIKE :q", 
+        q: search_term
+      )
+    else
+      @users_query = base_query
+    end
+
+    @pagy, @users = pagy(@users_query)
   end
 
   def new

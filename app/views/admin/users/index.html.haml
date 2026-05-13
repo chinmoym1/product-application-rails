@@ -2,47 +2,62 @@
   .flex.flex-col.md:flex-row.justify-between.items-center.mb-6.gap-4
     %h1.text-3xl.font-bold.text-gray-900.dark:text-white Manage Users
     
-    .flex.gap-3
-      = link_to new_invite_admin_users_path, class: "flex items-center text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 transition-colors" do
-        %svg.w-4.h-4.mr-2{fill: "none", stroke: "currentColor", viewBox: "0 0 24 24"}
-          %path{d: "M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z", "stroke-linecap" => "round", "stroke-linejoin" => "round", "stroke-width" => "2"}
-        Send Invite
+    .flex.flex-col.sm:flex-row.gap-3.w-full.lg:w-auto.items-center
+      
+      = form_with url: admin_users_path, method: :get, data: { turbo_frame: "users_table", turbo_action: "advance" }, class: "relative w-full sm:w-64" do |f|
+        .absolute.inset-y-0.left-0.flex.items-center.pl-3.pointer-events-none
+          %svg.w-4.h-4.text-gray-500.dark:text-gray-400{fill: "none", stroke: "currentColor", viewBox: "0 0 24 24"}
+            %path{stroke_linecap: "round", stroke_linejoin: "round", stroke_width: "2", d: "M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"}
+        .flex-grow
+          = f.text_field :query, value: params[:query], placeholder: "Search by email...", oninput: "this.form.requestSubmit()", class: "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+        = f.submit "Search", class: "hidden"
 
-      = link_to new_admin_user_path, class: "flex items-center text-white bg-green-600 hover:bg-green-700 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-green-500 dark:hover:bg-green-600 focus:outline-none dark:focus:ring-green-800 transition-colors" do
-        %svg.w-4.h-4.mr-2{fill: "none", stroke: "currentColor", viewBox: "0 0 24 24"}
-          %path{d: "M12 6v6m0 0v6m0-6h6m-6 0H6", "stroke-linecap" => "round", "stroke-linejoin" => "round", "stroke-width" => "2"}
-        Add User
+      .flex.gap-2.w-full.sm:w-auto
+        = link_to new_invite_admin_users_path, class: "flex-1 sm:flex-none flex justify-center items-center text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 transition-colors whitespace-nowrap" do
+          %svg.w-4.h-4.mr-2{fill: "none", stroke: "currentColor", viewBox: "0 0 24 24"}
+            %path{d: "M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z", "stroke-linecap" => "round", "stroke-linejoin" => "round", "stroke-width" => "2"}
+          Send Invite
 
-  .relative.overflow-x-auto.shadow-md.sm:rounded-lg
-    %table.w-full.text-sm.text-left.text-gray-500.dark:text-gray-400
-      %thead.text-xs.text-gray-700.uppercase.bg-gray-50.dark:bg-gray-700.dark:text-gray-400
-        %tr
-          %th.px-6.py-3{scope: "col"} Email
-          %th.px-6.py-3{scope: "col"} Company
-          %th.px-6.py-3{scope: "col"} Role
-          %th.px-6.py-3{scope: "col"} Actions
-          
-      %tbody
-        - @users.each do |user|
-          %tr.bg-white.border-b.dark:bg-gray-800.dark:border-gray-700.hover:bg-gray-50.dark:hover:bg-gray-500
-            %th.px-6.py-4.font-medium.text-gray-900.whitespace-nowrap.dark:text-white{scope: "row"}= user.email
+        = link_to new_admin_user_path, class: "flex-1 sm:flex-none flex justify-center items-center text-white bg-green-600 hover:bg-green-700 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-4 py-2.5 dark:bg-green-500 dark:hover:bg-green-600 focus:outline-none dark:focus:ring-green-800 transition-colors whitespace-nowrap" do
+          %svg.w-4.h-4.mr-2{fill: "none", stroke: "currentColor", viewBox: "0 0 24 24"}
+            %path{d: "M12 6v6m0 0v6m0-6h6m-6 0H6", "stroke-linecap" => "round", "stroke-linejoin" => "round", "stroke-width" => "2"}
+          Add User
+
+  = turbo_frame_tag "users_table" do
+    .relative.overflow-x-auto.shadow-md.sm:rounded-lg
+      %table.w-full.text-sm.text-left.text-gray-500.dark:text-gray-400
+        %thead.text-xs.text-gray-700.uppercase.bg-gray-50.dark:bg-gray-700.dark:text-gray-400
+          %tr
+            %th.px-6.py-3{scope: "col"} Email
+            %th.px-6.py-3{scope: "col"} Company
+            %th.px-6.py-3{scope: "col"} Role
+            %th.px-6.py-3{scope: "col"} Actions
             
-            %td.px-6.py-4
-              - if user.company
-                %span.bg-blue-100.text-blue-800.text-xs.font-medium.px-2.5.py-0.5.rounded.dark:bg-blue-900.dark:text-blue-300
-                  = user.company.name
-              - else
-                %span.text-gray-400 Unassigned
-                
-            %td.px-6.py-4
-              - if user.role
-                %span.bg-green-100.text-green-800.text-xs.font-medium.px-2.5.py-0.5.rounded.dark:bg-green-900.dark:text-green-300
-                  = user.role.name
-              - else
-                %span.text-gray-400 None
-
-            %td.px-6.py-2.flex.space-x-4.items-center.mt-2
-              = link_to icon(:pencil), edit_admin_user_path(user), title: "Edit Details", class: "font-medium text-yellow-600 dark:text-yellow-500 hover:underline"
+        %tbody
+          - @users.each do |user|
+            %tr.bg-white.border-b.dark:bg-gray-800.dark:border-gray-700.hover:bg-gray-50.dark:hover:bg-gray-500
+              %th.px-6.py-4.font-medium.text-gray-900.whitespace-nowrap.dark:text-white{scope: "row"}= user.email
               
-              - if user != current_user
-                = button_to icon(:trash), admin_user_path(user), title: "Delete Record", method: :delete, data: { turbo_confirm: 'Are you sure?' }, class: "font-medium text-red-600 dark:text-red-500 hover:underline bg-transparent border-0 p-0 cursor-pointer"
+              %td.px-6.py-4
+                - if user.company
+                  %span.bg-blue-100.text-blue-800.text-xs.font-medium.px-2.5.py-0.5.rounded.dark:bg-blue-900.dark:text-blue-300
+                    = user.company.name
+                - else
+                  %span.text-gray-400 Unassigned
+                  
+              %td.px-6.py-4
+                - if user.role
+                  %span.bg-green-100.text-green-800.text-xs.font-medium.px-2.5.py-0.5.rounded.dark:bg-green-900.dark:text-green-300
+                    = user.role.name
+                - else
+                  %span.text-gray-400 None
+
+              %td.px-6.py-2.flex.space-x-4.items-center.mt-2
+                = link_to icon(:pencil), edit_admin_user_path(user), title: "Edit Details", class: "font-medium text-yellow-600 dark:text-yellow-500 hover:underline"
+                
+                - if user != current_user
+                  = button_to icon(:trash), admin_user_path(user), title: "Delete Record", method: :delete, data: { turbo_confirm: 'Are you sure?' }, class: "font-medium text-red-600 dark:text-red-500 hover:underline bg-transparent border-0 p-0 cursor-pointer"
+                
+    - if @pagy.pages > 1
+      .mt-6.flex.justify-center
+        = custom_pagy_nav(@pagy)
