@@ -11,12 +11,6 @@ class ApplicationController < ActionController::Base
   end
 
   def after_sign_in_path_for(resource)
-    if can?(:manage, Product) || can?(:read, Product)
-      products_path
-    elsif can?(:manage, Order)
-      orders_path
-    else
       root_path
-    end
   end
 end

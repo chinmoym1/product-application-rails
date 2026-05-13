@@ -2,7 +2,9 @@ Rails.application.routes.draw do
   # devise_for :users
   devise_for :users, controllers: { registrations: 'users/registrations' }
   
-  root "dashboard#index" 
+  root "dashboard#index"
+
+  # get "dashboard", to: "dashboard#index"
 
   resources :products do
     # resources :product_vendors, only: [:create, :destroy]

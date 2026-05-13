@@ -1,40 +1,48 @@
 %aside#main-sidebar.w-64.bg-white.dark:bg-gray-800.border-r.border-gray-200.dark:border-gray-700.flex-shrink-0.flex.flex-col.fixed.inset-y-0.left-0.z-50.transform.-translate-x-full.md:relative.md:translate-x-0.transition-all.duration-300.ease-in-out
   
-  .h-16.flex.items-center.px-6.border-b.border-gray-200.dark:border-gray-700
+  .h-16.flex.items-center.justify-between.px-6.border-b.border-gray-200.dark:border-gray-700
     = link_to root_path, class: "flex items-center space-x-3" do
       %span.text-xl.font-black.tracking-tight.text-gray-900.dark:text-white Products Manager
+    
+    %button.md:hidden.p-2.-mr-2.text-gray-500.hover:bg-gray-100.rounded-lg.dark:text-gray-400.dark:hover:bg-gray-700{ type: "button", onclick: "toggleSidebar()" }
+      %svg.w-6.h-6{ fill: "none", stroke: "currentColor", viewBox: "0 0 24 24" }
+        %path{ "stroke-linecap" => "round", "stroke-linejoin" => "round", "stroke-width" => "2", d: "M6 18L18 6M6 6l12 12" }
 
   / Navigation Links
   .overflow-y-auto.flex-1.py-6.px-4
     %ul.space-y-2.font-medium
+      
+      - base_classes = "flex items-center p-3 rounded-xl transition-colors group"
+      - inactive_classes = "text-gray-700 dark:text-gray-300 hover:bg-gray-100 hover:text-indigo-600 dark:hover:bg-gray-700 dark:hover:text-indigo-400"
+      - active_classes = "bg-indigo-50 text-indigo-700 font-bold dark:bg-indigo-900/40 dark:text-indigo-400"
 
-      -if can? :read, Product
+      %li
+        = link_to "Dashboard", root_path, class: "#{base_classes} #{current_page?(root_path) || current_page?('/dashboard') ? active_classes : inactive_classes}"
+
+      - if can? :read, Product
         %li
-          = link_to "Products", products_path, class: "flex items-center p-3 text-gray-700 rounded-xl dark:text-gray-300 hover:bg-gray-100 active:bg-gray-200 hover:text-indigo-600 active:text-indigo-700 dark:hover:bg-gray-700 dark:active:bg-gray-600 dark:hover:text-indigo-400 transition-colors group"
+          = link_to "Products", products_path, class: "#{base_classes} #{current_page?(products_path) ? active_classes : inactive_classes}"
       
-      -if can? :read, Vendor
+      - if can? :read, Vendor
         %li
-          = link_to "Vendors", vendors_path, class: "flex items-center p-3 text-gray-700 rounded-xl dark:text-gray-300 hover:bg-gray-100 active:bg-gray-200 hover:text-indigo-600 active:text-indigo-700 dark:hover:bg-gray-700 dark:active:bg-gray-600 dark:hover:text-indigo-400 transition-colors group"
+          = link_to "Vendors", vendors_path, class: "#{base_classes} #{current_page?(vendors_path) ? active_classes : inactive_classes}"
       
-      -if can? :read, Stock
+      - if can? :read, Stock
         %li
-          = link_to "Stocks", stocks_path, class: "flex items-center p-3 text-gray-700 rounded-xl dark:text-gray-300 hover:bg-gray-100 active:bg-gray-200 hover:text-indigo-600 active:text-indigo-700 dark:hover:bg-gray-700 dark:active:bg-gray-600 dark:hover:text-indigo-400 transition-colors group"
+          = link_to "Stocks", stocks_path, class: "#{base_classes} #{current_page?(stocks_path) ? active_classes : inactive_classes}"
       
-      -if can? :read, Order
+      - if can? :read, Order
         %li
-          = link_to "Orders", orders_path, class: "flex items-center p-3 text-gray-700 rounded-xl dark:text-gray-300 hover:bg-gray-100 active:bg-gray-200 hover:text-indigo-600 active:text-indigo-700 dark:hover:bg-gray-700 dark:active:bg-gray-600 dark:hover:text-indigo-400 transition-colors group"
+          = link_to "Orders", orders_path, class: "#{base_classes} #{current_page?(orders_path) ? active_classes : inactive_classes}"
       
-      -if can? :read, Customer
+      - if can? :read, Customer
         %li
-          = link_to "Customers", customers_path, class: "flex items-center p-3 text-gray-700 rounded-xl dark:text-gray-300 hover:bg-gray-100 active:bg-gray-200 hover:text-indigo-600 active:text-indigo-700 dark:hover:bg-gray-700 dark:active:bg-gray-600 dark:hover:text-indigo-400 transition-colors group"
+          = link_to "Customers", customers_path, class: "#{base_classes} #{current_page?(customers_path) ? active_classes : inactive_classes}"
       
-      -# - if can? :update, current_user.company
-      -#   %li
-      -#     = link_to "Company Settings", edit_company_path, class: "text-gray-700 hover:text-blue-600 px-3 py-2"
       - if current_user.role&.name == 'Admin'
         %li
-          = link_to "Manage Users", admin_users_path, class: "flex items-center p-3 text-gray-700 rounded-xl dark:text-gray-300 hover:bg-gray-100 active:bg-gray-200 hover:text-indigo-600 active:text-indigo-700 dark:hover:bg-gray-700 dark:active:bg-gray-600 dark:hover:text-indigo-400 transition-colors group"
+          = link_to "Manage Users", admin_users_path, class: "#{base_classes} #{current_page?(admin_users_path) ? active_classes : inactive_classes}"
       
       - if can? :manage, Role
         %li
-          = link_to "Roles & Permissions", roles_path, class: "flex items-center p-3 text-gray-700 rounded-xl dark:text-gray-300 hover:bg-gray-100 active:bg-gray-200 hover:text-indigo-600 active:text-indigo-700 dark:hover:bg-gray-700 dark:active:bg-gray-600 dark:hover:text-indigo-400 transition-colors group"
+          = link_to "Roles & Permissions", roles_path, class: "#{base_classes} #{current_page?(roles_path) ? active_classes : inactive_classes}"

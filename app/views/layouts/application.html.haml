@@ -35,17 +35,46 @@
 
           %main.flex-1.overflow-y-auto.p-4.md:p-8
             = yield
-            
+
       :javascript
-        function toggleSidebar() {
+        window.toggleSidebar = function() {
           const sidebar = document.getElementById('main-sidebar');
           const overlay = document.getElementById('sidebar-overlay');
           
           sidebar.classList.toggle('-translate-x-full');
-          overlay.classList.toggle('hidden');
+          if (overlay) overlay.classList.toggle('hidden');
 
           sidebar.classList.toggle('md:-ml-64');
-        }
+
+          const isClosed = sidebar.classList.contains('md:-ml-64');
+          localStorage.setItem('sidebarClosed', isClosed);
+        };
+
+        window.toggleUserMenu = function(event) {
+          if(event) event.stopPropagation();
+          const menu = document.getElementById('user-dropdown-menu');
+          menu.classList.toggle('hidden');
+        };
+
+        document.addEventListener('click', function(event) {
+          const menu = document.getElementById('user-dropdown-menu');
+          const btn = document.getElementById('user-menu-btn');
+          
+          if (menu && !menu.classList.contains('hidden') && !btn.contains(event.target) && !menu.contains(event.target)) {
+            menu.classList.add('hidden');
+          }
+        });
+
+        document.addEventListener("turbo:load", () => {
+          const sidebar = document.getElementById('main-sidebar');
+          if (!sidebar) return; 
+
+          if (localStorage.getItem('sidebarClosed') === 'true') {
+            sidebar.classList.add('md:-ml-64');
+          } else {
+            sidebar.classList.remove('md:-ml-64');
+          }
+        });
         
     - else
       %main.p-4.md:p-8.min-h-screen.flex.items-center.justify-center
