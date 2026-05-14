@@ -17,10 +17,12 @@
   .flex.items-center.gap-3.sm:gap-4.ml-auto.pl-4
     
     .relative
-      %button#user-menu-btn.flex.items-center.focus:outline-none{ type: "button", title: " View Profile", onclick: "toggleUserMenu(event)" }
-        
-        .h-9.w-9.rounded-full.bg-indigo-50.dark:bg-indigo-900.border.border-indigo-100.dark:border-indigo-800.flex.items-center.justify-center.text-indigo-600.dark:text-indigo-400.font-bold.text-sm.flex-shrink-0.shadow-sm.hover:ring-2.hover:ring-indigo-300.dark:hover:ring-indigo-500.transition-all
-          = current_user.email[0].upcase
+      %button#user-menu-btn.flex.items-center.focus:outline-none{ type: "button", title: "View Profile", onclick: "toggleUserMenu(event)" }
+        - if current_user.avatar.attached?
+          = image_tag current_user.avatar, class: "h-9 w-9 rounded-full object-cover border border-indigo-100 dark:border-indigo-800 shadow-sm hover:ring-2 hover:ring-indigo-300 dark:hover:ring-indigo-500 transition-all flex-shrink-0"
+        - else
+          .h-9.w-9.rounded-full.bg-indigo-50.dark:bg-indigo-900.border.border-indigo-100.dark:border-indigo-800.flex.items-center.justify-center.text-indigo-600.dark:text-indigo-400.font-bold.text-sm.flex-shrink-0.shadow-sm.hover:ring-2.hover:ring-indigo-300.dark:hover:ring-indigo-500.transition-all
+            = current_user.email[0].upcase
 
       #user-dropdown-menu.hidden.absolute.right-0.top-full.mt-3.w-64.bg-white.dark:bg-gray-800.rounded-xl.shadow-xl.border.border-gray-100.dark:border-gray-700.py-3.z-50
         .px-4
@@ -35,6 +37,13 @@
             %span.mx-1.text-gray-300.dark:text-gray-600 &bull;
             %span.px-2.py-1.bg-green-50.dark:bg-green-900.text-green-600.dark:text-green-400.rounded-md.truncate.max-w-100px
               = current_user.company&.name&.titleize || "App"
+        
+        .border-t.border-gray-100.dark:border-gray-700.mt-3.pt-2
+          = link_to edit_user_registration_path, class: "flex items-center gap-3 px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700/50 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors" do
+            %svg.w-4.h-4{ fill: "none", stroke: "currentColor", viewBox: "0 0 24 24" }
+              %path{ "stroke-linecap" => "round", "stroke-linejoin" => "round", "stroke-width" => "2", d: "M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" }
+              %path{ "stroke-linecap" => "round", "stroke-linejoin" => "round", "stroke-width" => "2", d: "M15 12a3 3 0 11-6 0 3 3 0 016 0z" }
+            Account Settings
 
     .h-5.w-px.bg-gray-200.dark:bg-gray-700.hidden.sm:block
 
